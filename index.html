@@ -427,13 +427,13 @@
         <div class="logo">T</div>
         <div>
           <p class="eyebrow">Testudo</p>
-          <h1 class="headline">Digitale Entscheidungsassistenz für Ihre Absicherung</h1>
-          <p class="lede">Testudo bündelt branchenspezifisches Wissen in einem klaren Fragebogen. Schritt für Schritt erhalten Sie eine strukturierte Grundlage für die Wahl zwischen privater und gesetzlicher Krankenversicherung.</p>
+          <h1 class="headline">Conversational UI for Insurance</h1>
+          <p class="lede">Ziel dieses Projekts ist die Entwicklung eines intelligenten, digitalen Entscheidungshelfers, der potenzielle Kunden strukturiert durch die Empfehlung eines Versicherungsangebots im Gesundheitsbereich führt..</p>
         </div>
       </div>
       <div class="meta-grid">
-        <div class="stat">Beta · MVP-Wizard</div>
-        <div class="stat">Letzte Aktualisierung: Januar 2025</div>
+        <div class="stat">Developed by Kaan, Kadir, Cetin, Mustafa</div>
+        <div class="stat">Letzte Aktualisierung: 30.10.2025</div>
       </div>
     </header>
 
@@ -481,7 +481,7 @@
         options: ["Beamter", "Selbstständig", "Angestellter", "Auszubildender/Student", "Arbeitslos", "Rente"] },
 
       { id: "income", title: "Wie hoch ist ihr jährliches Bruttoeinkommen?", type: "single",
-        subtitle: "Hinweis: Eine PKV ist in der Regel ab 69.300 € (2025) möglich.",
+//        subtitle: "Hinweis: Eine PKV ist in der Regel ab 69.300 € (2025) möglich.",
         options: ["Unter 20.000€", "20.001€ - 40.000€", "40.001€ - 69.299€", "Über 69.300€"] },
 
       { id: "jobIntensity", title: "Wie körperlich intensiv ist Ihr Beruf?", type: "single",
@@ -490,8 +490,8 @@
       { id: "extrasImportance", title: "Sind Ihnen Zusatzleistungen wichtig?", type: "yesno" },
 
       { id: "extrasSelection", title: "Bitte wählen Sie Zusatzleistungen aus, die Ihnen wichtig sind", type: "multi",
-        visibleIf: a => a.extrasImportance === "Ja",
-        options: ["Zahnleistungen", "Reiseversicherungen", "Krankenleistungen", "Ich weiß es nicht"] },
+        visibleIf: a => a.extrasImportance === "Ja" || !a.extrasImportance,
+        options: ["Zahnleistungen", "Reiseversicherungen", "Krankenleistungen"] },
 
       { id: "maritalStatus", title: "Wie ist Ihr Familienstand?", type: "single",
         options: ["Ledig", "In Partnerschaft", "Verheiratet", "Geschieden", "Verwitwet"] },
@@ -739,3 +739,4 @@
   </script>
 </body>
 </html>
+
