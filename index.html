@@ -3,548 +3,176 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Testudo – Entscheidungsassistent</title>
+  <title>Testudo – Digitaler Entscheidungshelfer</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
-
-    :root {
-      color-scheme: dark;
-      font-family: 'Manrope', system-ui, -apple-system, "Segoe UI", sans-serif;
-      --bg: #040810;
-      --bg-soft: rgba(11, 20, 39, 0.78);
-      --card: rgba(10, 18, 34, 0.92);
-      --panel: rgba(12, 24, 50, 0.86);
-      --text: #f2f6ff;
-      --muted: #9fb2cd;
-      --brand-1: #1cf2af;
-      --brand-2: #1c8fff;
-      --radius-lg: 26px;
-      --radius-md: 18px;
-      --radius-sm: 12px;
-      --shadow-lg: 0 32px 80px rgba(5, 11, 25, 0.55);
+    /* ===== Testudo Design ===== */
+    :root{
+      --cream:#fbf4e8;
+      --navy:#0f2230;
+      --ink:#10222b;
+      --muted:#6b7b86;
+      --line:#e9e1d6;
+      --accent:#2f8b6a;    /* Testudo-Grün */
+      --accent-2:#1c6f9f;  /* sekundärer Akzent */
+      --card:#ffffff;
+      --radius:20px;
     }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;background:var(--cream);color:var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      display:flex;align-items:center;justify-content:center;padding:28px;
     }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: clamp(20px, 4vw, 48px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at 15% -10%, rgba(28, 242, 175, 0.35), transparent 42%),
-                  radial-gradient(circle at 90% 15%, rgba(28, 143, 255, 0.35), transparent 45%),
-                  radial-gradient(ellipse at bottom, rgba(28, 143, 255, 0.25), transparent 60%),
-                  var(--bg);
-      color: var(--text);
-      overflow: hidden;
+    .app{
+      width:min(980px,100%);
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:0 18px 50px rgba(16,34,43,.08);
+      overflow:hidden;
     }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: url('data:image/svg+xml,%3Csvg width="340" height="340" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" opacity="0.6"%3E%3Cdefs%3E%3ClinearGradient id="g" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="%231c8fff"/%3E%3Cstop offset="1" stop-color="%231cf2af"/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill="none" stroke="url(%23g)" stroke-width="0.7" opacity="0.15"%3E%3Cpath d="M5 80c30-32 120-32 150 0"/%3E%3Cpath d="M5 110c30-32 120-32 150 0"/%3E%3Cpath d="M5 50c30-32 120-32 150 0"/%3E%3C/g%3E%3C/svg%3E');
-      background-size: 540px 540px;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.45;
-      transform: translate3d(0, 0, 0);
+    header{
+      display:flex;gap:16px;align-items:center;justify-content:space-between;
+      padding:18px 22px;border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#ffffff, #fffaf3);
     }
-
-    .shell {
-      width: min(1100px, 100%);
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-      position: relative;
-      z-index: 1;
+    .brand{
+      display:flex;gap:14px;align-items:center;
     }
-
-    .masthead {
-      display: flex;
-      gap: 28px;
-      align-items: center;
-      justify-content: space-between;
-      padding: clamp(24px, 5vw, 36px);
-      background: var(--bg-soft);
-      backdrop-filter: blur(26px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
+    .logo{
+      width:44px;height:44px;border-radius:14px;overflow:hidden;background:#e9f5ef;
+      display:grid;place-items:center;border:1px solid #dfeee6;
+      font-weight:800;color:var(--accent);
     }
-
-    .brand {
-      display: flex;
-      gap: 20px;
-      align-items: center;
+    .title{font-weight:800;font-size:1.25rem;color:var(--navy);letter-spacing:.2px}
+    .subtitle{color:var(--muted);font-size:.95rem}
+    .progress{height:8px;background:#f2eadd;margin:0 22px 18px;border-radius:999px;overflow:hidden}
+    .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .25s ease}
+    main{padding:22px}
+    .qhead{font-size:1.5rem;line-height:1.25;font-weight:800;color:var(--navy);margin:4px 0 8px}
+    .qsub{color:var(--muted);margin-bottom:18px}
+    .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+    .opt{
+      padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff;cursor:pointer;
+      transition:.15s ease; user-select:none;
     }
-
-    .logo {
-      width: 58px;
-      height: 58px;
-      border-radius: 20px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, rgba(28, 242, 175, 0.9), rgba(28, 143, 255, 0.9));
-      color: #05111a;
-      font-weight: 800;
-      font-size: 1.8rem;
-      letter-spacing: 1px;
-      box-shadow: 0 18px 34px rgba(28, 143, 255, 0.35);
+    .opt:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(16,34,43,.05)}
+    .opt.selected{outline:2px solid var(--accent);background:#f4fbf7}
+    .opt input{display:none}
+    .controls{display:flex;justify-content:space-between;gap:10px;margin-top:22px}
+    .btn{
+      padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--navy);
+      font-weight:700;cursor:pointer
     }
-
-    .eyebrow {
-      text-transform: uppercase;
-      letter-spacing: 0.24em;
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.65);
-      margin: 0 0 6px;
+    .btn.primary{background:var(--accent);border-color:var(--accent);color:#ffffff}
+    .btn[disabled]{opacity:.45;cursor:default}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .summary{display:none}
+    .tag{display:inline-flex;align-items:center;gap:8px;background:#f7f3eb;border:1px solid var(--line);border-radius:999px;padding:8px 12px;margin:6px 6px 0 0;font-size:.92rem}
+    .hr{height:1px;background:var(--line);margin:18px 0}
+    .hidden{display:none !important}
+    /* Inputs */
+    .field{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .input{
+      height:44px;border-radius:12px;border:1px solid var(--line);padding:0 12px;min-width:120px;
+      font-size:1rem;background:#fff;color:var(--ink)
     }
-
-    .headline {
-      margin: 0;
-      font-size: clamp(1.9rem, 4vw, 2.5rem);
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-
-    .lede {
-      margin: 10px 0 0;
-      max-width: 520px;
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
-    .meta-grid {
-      display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      text-align: right;
-    }
-
-    .stat {
-      padding: 12px 16px;
-      border-radius: var(--radius-sm);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(10, 20, 38, 0.8);
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    .app {
-      background: var(--panel);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      overflow: hidden;
-    }
-
-    .app-header {
-      padding: clamp(20px, 5vw, 36px) clamp(24px, 6vw, 48px) clamp(12px, 3vw, 24px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      background: linear-gradient(160deg, rgba(11, 29, 56, 0.85), rgba(11, 22, 44, 0.7));
-    }
-
-    .label {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: rgba(28, 242, 175, 0.12);
-      color: var(--brand-1);
-      border: 1px solid rgba(28, 242, 175, 0.35);
-    }
-
-    .wizard-title {
-      margin: 12px 0 6px;
-      font-size: clamp(1.4rem, 3vw, 1.9rem);
-      font-weight: 700;
-    }
-
-    .wizard-subtitle {
-      margin: 0;
-      color: var(--muted);
-      max-width: 560px;
-      line-height: 1.6;
-      font-size: 0.98rem;
-    }
-
-    .progress {
-      height: 10px;
-      margin-top: 28px;
-      background: rgba(255, 255, 255, 0.07);
-      border-radius: 999px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .progress::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(28, 242, 175, 0.25), rgba(28, 143, 255, 0.25));
-      filter: blur(18px);
-    }
-
-    .bar {
-      position: relative;
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--brand-1), var(--brand-2));
-      border-radius: inherit;
-      transition: width 0.35s ease;
-      box-shadow: 0 0 18px rgba(28, 143, 255, 0.45);
-    }
-
-    main {
-      padding: clamp(24px, 5vw, 48px);
-    }
-
-    .qhead {
-      font-size: clamp(1.2rem, 2.7vw, 1.6rem);
-      font-weight: 600;
-      margin: 0 0 16px;
-      letter-spacing: -0.01em;
-    }
-
-    .qsub {
-      color: var(--muted);
-      margin: 0 0 24px;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    .grid {
-      display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    }
-
-    .opt {
-      border-radius: var(--radius-md);
-      padding: 18px;
-      background: rgba(7, 15, 32, 0.65);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      cursor: pointer;
-      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .opt::after {
-      content: "";
-      position: absolute;
-      inset: -50% -10%;
-      background: radial-gradient(circle, rgba(28, 242, 175, 0.18), transparent 60%);
-      opacity: 0;
-      transition: opacity 0.18s ease;
-      pointer-events: none;
-    }
-
-    .opt:hover {
-      transform: translateY(-4px);
-      border-color: rgba(28, 242, 175, 0.4);
-      box-shadow: 0 18px 32px rgba(9, 20, 38, 0.4);
-    }
-
-    .opt:hover::after {
-      opacity: 1;
-    }
-
-    .opt.selected {
-      border: 1px solid rgba(28, 242, 175, 0.65);
-      box-shadow: 0 0 0 1px rgba(28, 242, 175, 0.35);
-      background: linear-gradient(140deg, rgba(28, 242, 175, 0.18), rgba(28, 143, 255, 0.12));
-    }
-
-    .opt input {
-      display: none;
-    }
-
-    .pill {
-      display: inline-flex;
-      gap: 12px;
-      align-items: center;
-      font-size: 1rem;
-      letter-spacing: -0.01em;
-    }
-
-    .muted {
-      color: var(--muted);
-      font-size: 0.94rem;
-    }
-
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      margin-top: clamp(24px, 4vw, 32px);
-      flex-wrap: wrap;
-    }
-
-    .row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 13px 18px;
-      border-radius: var(--radius-sm);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(6, 15, 30, 0.7);
-      color: var(--text);
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-
-    .btn:hover:not([disabled]) {
-      transform: translateY(-2px);
-      border-color: rgba(28, 242, 175, 0.4);
-      background: rgba(9, 20, 38, 0.85);
-    }
-
-    .btn[disabled] {
-      opacity: 0.45;
-      cursor: default;
-      transform: none;
-    }
-
-    .btn.primary {
-      border: none;
-      color: #041321;
-      background: linear-gradient(120deg, var(--brand-1), var(--brand-2));
-      box-shadow: 0 14px 28px rgba(28, 143, 255, 0.45);
-    }
-
-    .summary {
-      display: none;
-      margin-top: clamp(32px, 5vw, 42px);
-    }
-
-    .summary h2 {
-      margin: 0 0 20px;
-      font-size: 1.3rem;
-    }
-
-    #answers {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(8, 19, 36, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.92rem;
-    }
-
-    .hr {
-      height: 1px;
-      background: rgba(255, 255, 255, 0.08);
-      margin: 24px 0;
-    }
-
-    .help {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .footer-note {
-      margin-top: 24px;
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.85rem;
-      letter-spacing: 0.03em;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    @media (max-width: 960px) {
-      .masthead {
-        flex-direction: column;
-        text-align: left;
-        align-items: flex-start;
-      }
-
-      .meta-grid {
-        width: 100%;
-        grid-template-columns: 1fr;
-        text-align: left;
-      }
-    }
-
-    @media (max-width: 640px) {
-      body {
-        padding: 18px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .controls {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .row {
-        width: 100%;
-        flex-direction: column;
-      }
-
-      .btn, .row .btn {
-        width: 100%;
-        text-align: center;
-      }
-    }
+    .hint{font-size:.9rem;color:var(--muted);margin-top:6px}
   </style>
 </head>
 <body>
-  <div class="shell">
-    <header class="masthead">
+  <div class="app" id="app">
+    <header>
       <div class="brand">
-        <div class="logo">T</div>
+        <!-- ersetze src durch /assets/testudo.png, wenn du ein Bild hast -->
+        <div class="logo">🐢</div>
         <div>
-          <p class="eyebrow">Testudo</p>
-          <h1 class="headline">Digitale Entscheidungsassistenz für Ihre Absicherung</h1>
-          <p class="lede">Testudo bündelt branchenspezifisches Wissen in einem klaren Fragebogen. Schritt für Schritt erhalten Sie eine strukturierte Grundlage für die Wahl zwischen privater und gesetzlicher Krankenversicherung.</p>
+          <div class="title">Testudo</div>
+          <div class="subtitle">Conversational UI for Insurance</div>
         </div>
-      </div>
-      <div class="meta-grid">
-        <div class="stat">Beta · MVP-Wizard</div>
-        <div class="stat">Letzte Aktualisierung: Januar 2025</div>
       </div>
     </header>
+    <div class="progress"><div class="bar" id="bar"></div></div>
 
-    <div class="app" id="app">
-      <div class="app-header">
-        <span class="label">Onboarding Wizard</span>
-        <h2 class="wizard-title">Ihre Antworten führen zur Empfehlung</h2>
-        <p class="wizard-subtitle">Beantworten Sie die Fragen nacheinander. Wir speichern den Fortschritt automatisch – Sie können jederzeit zurückspringen oder eine Frage überspringen.</p>
-        <div class="progress"><div class="bar" id="bar"></div></div>
-      </div>
-      <main>
-        <div id="question"></div>
+    <main>
+      <div id="question"></div>
 
-        <div class="controls">
-          <button class="btn" id="prevBtn">Zurück</button>
-          <div class="row">
-            <button class="btn" id="skipBtn">Ich weiß es nicht</button>
-            <button class="btn primary" id="nextBtn">Weiter</button>
-          </div>
+      <div class="controls">
+        <button class="btn" id="prevBtn">Zurück</button>
+        <div class="row">
+          <button class="btn" id="skipBtn">Ich weiß es nicht</button>
+          <button class="btn primary" id="nextBtn">Weiter</button>
         </div>
+      </div>
 
-        <section class="summary" id="summary">
-          <h2>Zusammenfassung Ihrer Angaben</h2>
-          <div id="answers"></div>
-          <div class="hr"></div>
-          <p class="help">
-            Dies ist eine Eingabe-Vorlage. Die finale Empfehlung (PKV / GKV + Zusatzabsicherung) kann auf Basis Ihrer Antworten berechnet und auf einer Ergebniskarte visualisiert werden.
-          </p>
-        </section>
-
-        <div class="footer-note">Version: MVP-Wizard · eine Frage pro Schritt · unterstützt bedingte Sichtbarkeit und Mehrfachauswahl</div>
-      </main>
-    </div>
+      <section class="summary" id="summary">
+        <h2 style="margin:10px 0 6px;color:var(--navy)">Zusammenfassung</h2>
+        <div id="answers"></div>
+        <div class="hr"></div>
+        <p class="hint">Hinweis: Die finale Empfehlung (z. B. „GKV + Zahnzusatz“) kann auf Basis dieser Antworten berechnet und als Ergebnis-Karte angezeigt werden.</p>
+      </section>
+    </main>
   </div>
 
   <script>
-    // ======= Fragenkatalog (aus deiner Liste; gekürzt gruppiert; jederzeit erweiterbar) =======
-    // type: "single" (Einfachauswahl), "multi" (Mehrfach), "yesno", "select"
-    // visibleIf: Funktion (answers) => true/false
+    // ===== Fragen (angepasst; Kinder-Flow mit Anzahl & optionale Altersauswahl) =====
+    // types: single | multi | yesno | number
     const QUESTIONS = [
-      // ——— Basisdaten
       { id:"age", title:"Wie alt sind Sie?", type:"single",
-        options:["18–29","30–39","40–59","ab 60"] },
+        options:["18–29","30–39","40–59","ab 60"], required:true },
 
       { id:"job", title:"Was ist Ihr aktueller Beruf?", type:"single",
-        options:["Auszubildender/Student","Angestellter","Selbstständig","Beamter","Arbeitslos","Rente"] },
+        options:["Auszubildender/Student","Angestellter","Selbstständig","Beamter","Arbeitslos","Rente"], required:true },
 
       { id:"jobIntensity", title:"Wie körperlich intensiv ist Ihr Beruf?", type:"single",
-        options:["überwiegend sitzend","teilweise körperlich","stark körperlich"] },
+        options:["überwiegend sitzend","teilweise körperlich","stark körperlich"], required:false },
 
       { id:"income", title:"Wie hoch ist Ihr jährliches Bruttoeinkommen?", type:"single",
-        subtitle:"Relevant: PKV i. d. R. erst ab 69.300 € (2025) möglich.",
-        options:["Unter 20.000 €","20.001–40.000 €","40.001–69.299 €","Über 69.300 €"] },
+        subtitle:"Hinweis: Wechsel in PKV in der Regel erst ab JAEG (~69.300 €) möglich.",
+        options:["Unter 20.000 €","20.001–40.000 €","40.001–69.299 €","Über 69.300 €"], required:true },
 
       { id:"family", title:"Familienstand?", type:"single",
-        options:["ledig","verheiratet","in Partnerschaft","geschieden","verwitwet"] },
+        options:["ledig","verheiratet","in Partnerschaft","geschieden","verwitwet"], required:true },
 
-      { id:"hasKids", title:"Haben Sie Kinder?", type:"yesno" },
+      { id:"hasKids", title:"Haben Sie Kinder?", type:"yesno", required:true },
 
-      { id:"kidsAges", title:"Alter Ihrer Kinder?", type:"multi",
-        visibleIf: a => a.hasKids === "Ja",
-        options:["0–5 Jahre","6–11 Jahre","12–17 Jahre","18+ Jahre"] },
+      // NEU: Anzahl Kinder (verhindert Blockade)
+      { id:"kidsCount", title:"Wie viele Kinder möchten Sie (mit)versichern?", type:"number",
+        min:1, max:10, placeholder:"Anzahl", required:true,
+        visibleIf:(a)=> a.hasKids==="Ja" },
 
-      // ——— Gesundheit
-      { id:"health", title:"Wie würden Sie Ihre Gesundheit einschätzen?", type:"single",
-        options:["sehr gut","gut","befriedigend","eingeschränkt"] },
+      // Altersangaben optional – blockiert „Weiter“ nicht mehr
+      { id:"kidsAge", title:"Wie alt ist / sind Ihr(e) Kind(er)? (optional)", type:"multi",
+        options:["unter 6 Jahre","6–17 Jahre","18–25 Jahre","über 25 Jahre"],
+        required:false,
+        visibleIf:(a)=> a.hasKids==="Ja" },
 
-      { id:"preExisting", title:"Bestehen chronische Erkrankungen?", type:"yesno" },
+      { id:"kidsIns", title:"Wie sind Ihr(e) Kind(er) derzeit versichert?", type:"single",
+        options:["über meine GKV","über eine PKV","aktuell nicht versichert"],
+        required:false,
+        visibleIf:(a)=> a.hasKids==="Ja" },
 
-      { id:"hospital", title:"Wie wichtig sind Ihnen Wahlleistungen im Krankenhaus?", type:"single",
-        options:["Chefarzt und Einzelzimmer","nur Einzelzimmer","egal"] },
+      { id:"chronic", title:"Haben Sie chronische Erkrankungen?", type:"yesno", required:false },
 
-      { id:"dent", title:"Wie hoch schätzen Sie Ihre Zahnarztkosten ein?", type:"single",
-        options:["< 200 €","200 – 500 €","> 500 €"] },
+      { id:"addonsImportant", title:"Sind Ihnen Zusatzleistungen wichtig?", type:"single",
+        options:["Ja","Nein","Ich weiß es nicht"], required:false },
 
-      // ——— Sicherheit & Budget
-      { id:"risk", title:"Welches Absicherungsniveau wünschen Sie?", type:"single",
-        options:["Maximal","Ausgewogen","Basis"] },
-
-      { id:"budget", title:"Welches Monatsbudget planen Sie für die Krankenversicherung ein?", type:"single",
-        options:["bis 350 €","351 – 520 €","521 – 700 €","mehr als 700 €"] },
-
-      { id:"reserve", title:"Verfügen Sie über finanzielle Rücklagen für unerwartete Kosten?", type:"yesno" },
-
-      // ——— Zukunft
-      { id:"plan", title:"Planen Sie berufliche Veränderungen in den nächsten 12 Monaten?", type:"single",
-        options:["Wechsel in Selbstständigkeit","Wechsel in Anstellung","Ruhestand","nein"] },
-
-      { id:"employer", title:"Bezuschusst Ihr Arbeitgeber die Krankenversicherung?", type:"yesno",
-        visibleIf: a => a.job === "Angestellter" },
-
-      { id:"priority", title:"Was ist Ihnen besonders wichtig?", type:"multi",
-        options:["Stabile Beiträge","Top-Leistungen","Flexibilität","Familienleistungen","Service"] }
+      { id:"addonsPick", title:"Welche Zusatzleistungen sind wichtig? (Mehrfachauswahl, optional)",
+        type:"multi",
+        options:["Krankenhaus-Komfort","Zahn & Prophylaxe","Sehhilfen & Brillen","Heilmethoden","Einkommensschutz (Krankentagegeld)","Pflegevorsorge","Reisen","Ambulant & Prävention"],
+        required:false,
+        visibleIf:(a)=> a.addonsImportant==="Ja" }
     ];
 
-    const state = {
-      step: 0,
-      answers: {},
-      order: []
-    };
+    // ===== Wizard-Logik =====
+    const state = { step:0, order:[], answers:{} };
 
     function recomputeOrder(){
-      const visible = [];
-      QUESTIONS.forEach(q => {
-        if(typeof q.visibleIf === 'function') {
-          if(q.visibleIf(state.answers)) visible.push(q);
-        } else {
-          visible.push(q);
-        }
-      });
-      state.order = visible;
+      const a = state.answers;
+      state.order = QUESTIONS.filter(q => !q.visibleIf || q.visibleIf(a));
+      if(state.step >= state.order.length) state.step = state.order.length-1;
+      updateProgress();
     }
 
     function render(){
@@ -554,59 +182,90 @@
       if(!q){ showSummary(); return; }
 
       const subtitle = q.subtitle ? `<div class="qsub">${q.subtitle}</div>` : "";
-      let optionsHTML = "";
+      let body = "";
 
       const current = state.answers[q.id];
 
-      function opt(id,label,checked){
-        const cls = `opt ${checked?'selected':''}`;
-        return `<label class="${cls}" data-value="${label}">
-                  <input type="${q.type==='multi'?'checkbox':'radio'}" name="${q.id}" ${checked?'checked':''}/>
-                  <span class="pill">${label}</span>
-                </label>`;
-      }
+      // Helpers
+      const opt = (label, selected) =>
+        `<label class="opt ${selected?'selected':''}" data-value="${label}">
+           <input type="checkbox"/> ${label}
+         </label>`;
 
-      if(q.type==='single' || q.type==='multi'){
-        optionsHTML = `<div class="grid">
-          ${q.options.map(o => {
-            const checked = q.type==='multi'
-              ? Array.isArray(current) && current.includes(o)
-              : current===o;
-            return opt(`${q.id}-${o}`, o, checked);
-          }).join("")}
-        </div>`;
+      // Render by type
+      if(q.type==='single'){
+        body = `<div class="grid">${
+          q.options.map(o => {
+            const s = current===o;
+            return `<label class="opt ${s?'selected':''}" data-value="${o}">
+                      <input type="radio" name="${q.id}"/> ${o}
+                    </label>`;
+          }).join("")
+        }</div>`;
+      }
+      else if(q.type==='multi'){
+        const cur = Array.isArray(current) ? current : [];
+        body = `<div class="grid">${
+          q.options.map(o => opt(o, cur.includes(o))).join("")
+        }</div>`;
       }
       else if(q.type==='yesno'){
         const opts = ["Ja","Nein"];
-        optionsHTML = `<div class="grid">
-          ${opts.map(o => opt(`${q.id}-${o}`, o, current===o)).join("")}
-        </div>`;
+        body = `<div class="grid">${
+          opts.map(o => {
+            const s = current===o;
+            return `<label class="opt ${s?'selected':''}" data-value="${o}">
+                      <input type="radio" name="${q.id}"/> ${o}
+                    </label>`;
+          }).join("")
+        }</div>`;
+      }
+      else if(q.type==='number'){
+        const val = (typeof current==='number') ? current : "";
+        body = `
+          <div class="field">
+            <input id="num-${q.id}" class="input" type="number"
+                   min="${q.min||0}" max="${q.max||999}"
+                   placeholder="${q.placeholder||''}" value="${val}">
+          </div>
+          <div class="hint">Zahl eingeben und „Weiter“ klicken.</div>
+        `;
       }
 
       qEl.innerHTML = `
         <div class="qhead">${q.title}</div>
         ${subtitle}
-        ${optionsHTML}
+        ${body}
       `;
 
-      // interaktive Auswahl
-      qEl.querySelectorAll('.opt').forEach(label=>{
-        label.addEventListener('click', (e)=>{
-          const value = label.dataset.value;
-          if(q.type==='multi'){
-            const arr = Array.isArray(state.answers[q.id]) ? [...state.answers[q.id]] : [];
-            const i = arr.indexOf(value);
-            if(i>=0) arr.splice(i,1); else arr.push(value);
-            state.answers[q.id] = arr;
-            label.classList.toggle('selected');
-          }else{
-            state.answers[q.id] = value;
-            qEl.querySelectorAll('.opt').forEach(l=>l.classList.remove('selected'));
-            label.classList.add('selected');
-          }
+      // Interaktionen
+      if(q.type==='multi' || q.type==='single' || q.type==='yesno'){
+        qEl.querySelectorAll('.opt').forEach(el=>{
+          el.addEventListener('click', ()=>{
+            const value = el.dataset.value;
+            if(q.type==='multi'){
+              const arr = Array.isArray(state.answers[q.id]) ? [...state.answers[q.id]] : [];
+              const i = arr.indexOf(value);
+              if(i>=0) arr.splice(i,1); else arr.push(value);
+              state.answers[q.id] = arr;
+              el.classList.toggle('selected');
+            }else{
+              state.answers[q.id] = value;
+              qEl.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));
+              el.classList.add('selected');
+            }
+            updateButtons();
+          });
+        });
+      }
+      if(q.type==='number'){
+        const input = document.getElementById(`num-${q.id}`);
+        input.addEventListener('input', ()=>{
+          const n = input.value === "" ? "" : Number(input.value);
+          state.answers[q.id] = (input.value==="" ? "" : n);
           updateButtons();
         });
-      });
+      }
 
       updateButtons();
       updateProgress();
@@ -615,9 +274,21 @@
 
     function currentAnswered(){
       const q = state.order[state.step];
-      const v = state.answers[q?.id];
       if(!q) return true;
+      const v = state.answers[q.id];
+
+      // Optional? → immer ok
+      if(q.required === false) return true;
+
       if(q.type==='multi') return Array.isArray(v) && v.length>0;
+      if(q.type==='number'){
+        if(v==="" || v===undefined || v===null) return false;
+        const n = Number(v);
+        if(Number.isNaN(n)) return false;
+        if(q.min!==undefined && n<q.min) return false;
+        if(q.max!==undefined && n>q.max) return false;
+        return true;
+      }
       return !!v;
     }
 
@@ -627,7 +298,7 @@
     }
 
     function updateProgress(){
-      const pct = Math.max(0, Math.min(100, Math.round((state.step) / Math.max(1,state.order.length) * 100)));
+      const pct = Math.max(0, Math.min(100, Math.round((state.step)/Math.max(1,state.order.length)*100)));
       document.getElementById('bar').style.width = `${pct}%`;
     }
 
@@ -639,8 +310,8 @@
       s.style.display = 'block';
       box.innerHTML = Object.entries(state.answers).map(([k,v])=>{
         const q = QUESTIONS.find(x=>x.id===k);
-        const val = Array.isArray(v) ? v.join(", ") : v;
-        return `<div class="tag"><strong>${q?.title||k}:</strong>&nbsp; ${val||"—"}</div>`;
+        const val = Array.isArray(v) ? v.join(", ") : (v===undefined||v==="" ? "—" : v);
+        return `<div class="tag"><strong>${q?.title||k}:</strong>&nbsp; ${val}</div>`;
       }).join("");
       document.getElementById('bar').style.width = "100%";
     }
@@ -650,7 +321,7 @@
       document.querySelector('.controls').classList.remove('hidden');
     }
 
-    // Buttons
+    // Navigation
     document.getElementById('prevBtn').addEventListener('click', ()=>{
       if(state.step>0){ state.step--; render(); }
     });
@@ -660,13 +331,13 @@
     });
     document.getElementById('skipBtn').addEventListener('click', ()=>{
       const q = state.order[state.step];
-      state.answers[q.id] = "Ich weiß es nicht";
+      if(q && q.required!==true){ state.answers[q.id] = "Ich weiß es nicht"; }
       if(state.step < state.order.length-1){ state.step++; render(); }
       else showSummary();
     });
 
     // Start
-    recomputeOrder(); render();
+    (function start(){ recomputeOrder(); render(); })();
   </script>
 </body>
 </html>
