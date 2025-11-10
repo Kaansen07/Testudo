@@ -1,0 +1,37 @@
+diff --git a/assets/testudo-logo.svg b/assets/testudo-logo.svg
+new file mode 100644
+index 0000000000000000000000000000000000000000..3c5b077e492280f68ddc4a30f2766f95a5551faf
+--- /dev/null
++++ b/assets/testudo-logo.svg
+@@ -0,0 +1,31 @@
++<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220">
++  <defs>
++    <linearGradient id="bg-grad" x1="0" y1="0" x2="0" y2="1">
++      <stop offset="0" stop-color="#fefaf2" />
++      <stop offset="1" stop-color="#f5e8d2" />
++    </linearGradient>
++    <linearGradient id="shell-grad" x1="0" y1="0" x2="1" y2="1">
++      <stop offset="0" stop-color="#4f9b74" />
++      <stop offset="1" stop-color="#2a7358" />
++    </linearGradient>
++    <linearGradient id="hoodie-grad" x1="0" y1="0" x2="1" y2="1">
++      <stop offset="0" stop-color="#1b4e5d" />
++      <stop offset="1" stop-color="#123240" />
++    </linearGradient>
++  </defs>
++  <rect x="20" y="24" width="184" height="184" rx="92" fill="url(#bg-grad)" />
++  <g transform="translate(40 38)">
++    <path d="M96 132c-22 0-42-14-50-35l-6-17c-5-14 4-30 19-34 5-18 23-30 42-30s37 12 42 30c15 4 24 20 19 34l-6 17c-8 21-28 35-50 35z" fill="#7bcf95" />
++    <path d="M114 70c0 11-9 20-20 20s-20-9-20-20 9-20 20-20 20 9 20 20z" fill="#95e5b0" />
++    <path d="M76 132c10 6 20 9 32 9s22-3 32-9" fill="none" stroke="url(#shell-grad)" stroke-width="10" stroke-linecap="round" />
++    <path d="M62 46c10-10 24-16 38-16s28 6 38 16" fill="none" stroke="#2f7d5f" stroke-width="12" stroke-linecap="round" />
++    <path d="M54 122s10-18 42-18 42 18 42 18v14c0 7-6 12-12 12H66c-7 0-12-5-12-12z" fill="url(#hoodie-grad)" />
++    <path d="M120 126c9 0 16 7 16 16v8c0 6-5 10-10 10H86c-6 0-10-4-10-10v-8c0-9 7-16 16-16z" fill="#256f83" />
++    <path d="M132 32c14 0 26 12 26 26" fill="none" stroke="#1f4555" stroke-width="10" stroke-linecap="round" />
++    <circle cx="150" cy="62" r="6" fill="#1f4555" />
++    <path d="M116 96c-6 6-16 6-22 0" fill="none" stroke="#1f4555" stroke-width="8" stroke-linecap="round" />
++    <circle cx="94" cy="72" r="6" fill="#1f4555" />
++    <circle cx="134" cy="72" r="6" fill="#1f4555" />
++    <path d="M74 62c-1-9 6-18 14-18" fill="none" stroke="#1f4555" stroke-width="7" stroke-linecap="round" />
++  </g>
++</svg>
