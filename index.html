@@ -450,21 +450,21 @@
         </div>
         <div class="brand-copy">
           <p class="eyebrow">Testudo</p>
-          <h1 class="headline">Digitale Entscheidungsassistenz für Ihre Absicherung</h1>
-          <p class="tagline">Conversational UI for Insurance</p>
-          <p class="lede">Testudo bündelt branchenspezifisches Wissen in einem klaren Fragebogen. Schritt für Schritt erhalten Sie eine strukturierte Grundlage für die Wahl zwischen privater und gesetzlicher Krankenversicherung.</p>
+          <h1 class="headline">Conversational UI for Insurance</h1>
+          <p class="tagline">Dein Digitaler Entscheidungshelfer für Gesundheitsversicherungen</p>
+          <p class="lede">Finde mit wenigen Klicks den Schutz der wirklich zu dir passt. Testudo hilft dir deine nötigen Gesundheitsversicherungen zu finden.</p>
         </div>
       </div>
       <div class="meta-grid">
-        <div class="stat">Beta · MVP-Wizard</div>
-        <div class="stat">Letzte Aktualisierung: Januar 2025</div>
+        <div class="stat">Product by adesso SE & TH Ohm Nürnberg</div>
+        <div class="stat">Letzte Aktualisierung: 10.11.2025</div>
       </div>
     </header>
 
     <div class="app" id="app">
       <div class="app-header">
-        <span class="label">Onboarding Wizard</span>
-        <h2 class="wizard-title">Ihre Antworten führen zur Empfehlung</h2>
+        <span class="label"> </span>
+        <h2 class="wizard-title">Ihre Antworten führen zur Empfehlung von Testudo</h2>
         <p class="wizard-subtitle">Beantworten Sie die Fragen nacheinander. Wir speichern den Fortschritt automatisch – Sie können jederzeit zurückspringen oder eine Frage überspringen.</p>
         <div class="progress"><div class="bar" id="bar"></div></div>
       </div>
@@ -488,7 +488,7 @@
           </p>
         </section>
 
-        <div class="footer-note">Version: MVP-Wizard · eine Frage pro Schritt · unterstützt bedingte Sichtbarkeit und Mehrfachauswahl</div>
+        <div class="footer-note"> </div>
       </main>
     </div>
   </div>
@@ -505,7 +505,6 @@
         options: ["Beamter", "Selbstständig", "Angestellter", "Auszubildender/Student", "Arbeitslos", "Rente"] },
 
       { id: "income", title: "Wie hoch ist ihr jährliches Bruttoeinkommen?", type: "single",
-        subtitle: "Hinweis: Eine PKV ist in der Regel ab 69.300 € (2025) möglich.",
         options: ["Unter 20.000€", "20.001€ - 40.000€", "40.001€ - 69.299€", "Über 69.300€"] },
 
       { id: "jobIntensity", title: "Wie körperlich intensiv ist Ihr Beruf?", type: "single",
@@ -515,17 +514,17 @@
 
       { id: "extrasSelection", title: "Bitte wählen Sie Zusatzleistungen aus, die Ihnen wichtig sind", type: "multi",
         visibleIf: a => a.extrasImportance === "Ja",
-        options: ["Zahnleistungen", "Reiseversicherungen", "Krankenleistungen", "Ich weiß es nicht"] },
+        options: ["Zahnleistungen", "Reiseversicherungen", "Krankenleistungen"] },
 
       { id: "maritalStatus", title: "Wie ist Ihr Familienstand?", type: "single",
         options: ["Ledig", "In Partnerschaft", "Verheiratet", "Geschieden", "Verwitwet"] },
 
       { id: "hasChildren", title: "Haben Sie Kinder?", type: "yesno" },
 
-      { id: "insureChildren", title: "Kinder mitversichern?", type: "yesno",
+      { id: "insureChildren", title: "Wollen Sie Ihre Kinder mitversichern?", type: "yesno",
         visibleIf: a => a.hasChildren === "Ja" },
 
-      { id: "childrenAge", title: "Wie alt ist Ihr Kind?", type: "multi",
+      { id: "childrenAge", title: "Wie alt ist/sind Ihr(e) Kind(er)?", type: "multi",
         visibleIf: a => a.insureChildren === "Ja",
         options: ["unter 6 Jahre alt", "6-17 Jahre alt", "18-25 Jahre alt", "über 25 Jahre alt"] },
 
@@ -549,7 +548,7 @@
 
       { id: "childrenBenefits", title: "Welche Leistungen sind Ihnen für Ihre Kinder besonders wichtig?", type: "multi",
         visibleIf: a => a.hasChildren === "Ja",
-        options: ["Zusätzliche Zahnleistungen", "Zusätzliche Reiseversicherungen", "Zusätzliche Krankenleistungen", "Ich weiß es nicht"] },
+        options: ["Zusätzliche Zahnleistungen", "Zusätzliche Reiseversicherungen", "Zusätzliche Krankenleistungen"] },
 
       { id: "specialistTreatment", title: "Sind Sie in regelmäßiger fachärztlicher Behandlung?", type: "yesno" },
 
@@ -583,7 +582,7 @@
         options: ["Ja, innerhalb der EU", "Ja, außerhalb der EU", "Nein"] },
 
       { id: "travelRegions", title: "In welche Gebiete?", type: "multi",
-        visibleIf: a => a.travel === "Ja, innerhalb der EU" || a.travel === "Ja, außerhalb der EU",
+        visibleIf: a => a.travel === "Ja, außerhalb der EU",
         options: ["USA / Kanada", "Afrika", "Naher Osten", "Asien oder Australien", "Südamerika"] },
 
       { id: "dangerousSports", title: "Üben Sie gefährliche Sportarten aus?", type: "yesno" },
@@ -593,10 +592,10 @@
         options: ["Hohes Risiko", "Mittleres Risiko", "Geringes Risiko"] },
 
       { id: "smoking", title: "Rauchen Sie Zigaretten oder ähnliche Tabakwaren?", type: "single",
-        options: ["Ja", "Gelegenheit", "Nein"] },
+        options: ["Ja", "Gelegentlich", "Nein"] },
 
       { id: "smokingType", title: "Was rauchen Sie?", type: "single",
-        visibleIf: a => a.smoking === "Ja" || a.smoking === "Gelegenheit",
+        visibleIf: a => a.smoking === "Ja" || a.smoking === "Gelegentlich",
         options: ["Cannabis", "Zigaretten", "Cannabis und Zigaretten"] },
 
       { id: "medicalCannabis", title: "Cannabis auf Rezept?", type: "yesno",
@@ -783,3 +782,4 @@
   </script>
 </body>
 </html>
+
