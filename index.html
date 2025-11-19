@@ -9,76 +9,304 @@
 
     :root{
       color-scheme: dark;
-      --brand:#A7D37B;            /* Hauptfarbe */
-      --brand2:#2E6B58;           /* dunkleres Grün */
-      --bg:#040810; --bg-soft:rgba(11,20,39,.78); --panel:rgba(12,24,50,.86);
-      --text:#f2f6ff; --muted:#9fb2cd; --line:rgba(255,255,255,.08);
+      --bg:#040810;
+      --bg-soft:rgba(11,20,39,.78);
+      --panel:rgba(12,24,50,.86);
+      --text:#f2f6ff;
+      --muted:#9fb2cd;
+      --line:rgba(255,255,255,.08);
+      --brand:#A7D37B;             /* Hauptfarbe Testudo */
+      --brand-dark:#4F7A3C;
       --r-lg:26px; --r-md:18px; --r-sm:12px;
       --shadow:0 32px 80px rgba(5,11,25,.55);
     }
+
     *{box-sizing:border-box}
     body{
-      margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-      padding:clamp(20px,4vw,48px);font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      background: radial-gradient(circle at 15% -10%, rgba(167,211,123,.25), transparent 42%),
-                  radial-gradient(circle at 90% 15%, rgba(46,107,88,.25), transparent 45%),
-                  radial-gradient(ellipse at bottom, rgba(46,107,88,.2), transparent 60%),
-                  var(--bg);
-      color:var(--text); overflow:hidden;
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:clamp(20px,4vw,48px);
+      font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:
+        radial-gradient(circle at 15% -10%, rgba(167,211,123,.28), transparent 42%),
+        radial-gradient(circle at 90% 15%, rgba(79,122,60,.35), transparent 45%),
+        radial-gradient(ellipse at bottom, rgba(15,34,43,.7), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      overflow-y:auto;   /* scrollen erlaubt */
     }
-    .shell{width:min(1100px,100%);display:flex;flex-direction:column;gap:24px;position:relative;z-index:1}
-    header.masthead{display:flex;gap:18px;align-items:center;justify-content:space-between;padding:clamp(18px,4vw,28px);
-      background:var(--bg-soft);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.05);border-radius:var(--r-lg);box-shadow:var(--shadow)}
-    .brand{display:flex;gap:16px;align-items:center}
-    .logo-img{width:150px;height:auto;object-fit:contain;border-radius:12px}
-    .eyebrow{text-transform:uppercase;letter-spacing:.24em;font-size:.7rem;color:rgba(255,255,255,.65);margin:0 0 4px}
-    .headline{margin:0;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;letter-spacing:-.01em}
-    .lede{margin:8px 0 0;max-width:520px;color:var(--muted);font-size:.98rem;line-height:1.6}
-    .mast-actions{display:flex;gap:10px;align-items:center}
-    .btn{padding:11px 16px;border-radius:12px;border:1px solid var(--line);background:rgba(6,15,30,.7);color:var(--text);cursor:pointer;font-weight:700}
-    .btn.primary{border:none;color:#0b1a11;background:var(--brand)}
-    .btn:hover{transform:translateY(-1px)}
-    .app{background:var(--panel);border-radius:var(--r-lg);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.05);overflow:hidden}
-    .app-header{padding:clamp(18px,4vw,28px) clamp(20px,5vw,36px) 12px;border-bottom:1px solid rgba(255,255,255,.06);
-      background:linear-gradient(160deg,rgba(11,29,56,.85),rgba(11,22,44,.7))}
-    .label{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(167,211,123,.18);color:#101b10;border:1px solid rgba(167,211,123,.5)}
-    .wizard-title{margin:10px 0 6px;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:800}
-    .wizard-subtitle{margin:0;color:var(--muted);max-width:560px;line-height:1.6;font-size:.95rem}
-    .progress{height:9px;margin-top:20px;background:rgba(255,255,255,.07);border-radius:999px;overflow:hidden}
-    .bar{height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--brand2));border-radius:inherit;transition:width .3s ease}
+    body::before{
+      content:"";
+      position:fixed;inset:0;pointer-events:none;opacity:.3;mix-blend-mode:screen;z-index:0;
+      background:url('data:image/svg+xml,%3Csvg width="340" height="340" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" opacity="0.6"%3E%3Cdefs%3E%3ClinearGradient id="g" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="%23A7D37B"/%3E%3Cstop offset="1" stop-color="%234F7A3C"/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill="none" stroke="url(%23g)" stroke-width="0.7" opacity="0.18"%3E%3Cpath d="M5 80c30-32 120-32 150 0"/%3E%3Cpath d="M5 110c30-32 120-32 150 0"/%3E%3Cpath d="M5 50c30-32 120-32 150 0"/%3E%3C/g%3E%3C/svg%3E') center/540px 540px no-repeat;
+    }
 
-    main{padding:clamp(20px,4vw,32px)}
-    .qhead{font-size:clamp(1.1rem,2.7vw,1.5rem);font-weight:800;margin:0 0 10px}
-    .qsub{color:var(--muted);margin:0 0 18px;font-size:.92rem}
-    .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-    .opt{border-radius:16px;padding:16px;background:rgba(7,15,32,.65);border:1px solid var(--line);cursor:pointer;user-select:none}
-    .opt.selected{border:1px solid rgba(167,211,123,.85);background:linear-gradient(140deg,rgba(167,211,123,.18),rgba(46,107,88,.12))}
+    .shell{
+      width:min(1100px,100%);
+      display:flex;
+      flex-direction:column;
+      gap:32px;
+      position:relative;
+      z-index:1;
+    }
+
+    .masthead{
+      display:flex;
+      gap:24px;
+      align-items:center;
+      justify-content:space-between;
+      padding:clamp(24px,5vw,36px);
+      background:var(--bg-soft);
+      backdrop-filter:blur(26px);
+      border:1px solid rgba(255,255,255,.05);
+      border-radius:var(--r-lg);
+      box-shadow:var(--shadow);
+    }
+    .brand{display:flex;gap:18px;align-items:center}
+    .logo-img{
+      width:160px;
+      height:auto;
+      border-radius:16px;
+      object-fit:contain;
+      display:block;
+      border:1px solid rgba(255,255,255,.12);
+      background:#0d1720;
+      padding:6px;
+    }
+    .eyebrow{
+      text-transform:uppercase;
+      letter-spacing:.24em;
+      font-size:.7rem;
+      color:rgba(255,255,255,.7);
+      margin:0 0 6px;
+    }
+    .headline{
+      margin:0;
+      font-size:clamp(1.9rem,4vw,2.5rem);
+      font-weight:800;
+      letter-spacing:-.01em;
+    }
+    .lede{
+      margin:10px 0 0;
+      max-width:520px;
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.6;
+    }
+    .meta-grid{
+      display:grid;
+      gap:10px;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      text-align:right;
+    }
+    .stat{
+      padding:10px 14px;
+      border-radius:var(--r-sm);
+      border:1px solid var(--line);
+      background:rgba(10,20,38,.85);
+      color:var(--muted);
+      font-size:.85rem;
+    }
+
+    .app{
+      background:var(--panel);
+      border-radius:var(--r-lg);
+      box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,.05);
+      overflow:hidden;
+    }
+    .app-header{
+      padding:clamp(20px,5vw,32px) clamp(24px,6vw,40px) clamp(14px,3vw,20px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background:linear-gradient(160deg,rgba(9,28,32,.9),rgba(8,20,32,.8));
+    }
+    .label{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 12px;border-radius:999px;
+      font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;
+      background:rgba(167,211,123,.12);color:var(--brand);
+      border:1px solid rgba(167,211,123,.5);
+    }
+    .wizard-title{margin:12px 0 6px;font-size:clamp(1.4rem,3vw,1.8rem);font-weight:800}
+    .wizard-subtitle{margin:0;color:var(--muted);max-width:560px;line-height:1.6;font-size:.96rem}
+    .progress{
+      height:9px;margin-top:22px;background:rgba(255,255,255,.08);
+      border-radius:999px;overflow:hidden;position:relative;
+    }
+    .bar{
+      height:100%;width:0;
+      background:linear-gradient(90deg,var(--brand),var(--brand-dark));
+      border-radius:inherit;
+      transition:width .3s ease;
+      box-shadow:0 0 18px rgba(167,211,123,.55);
+    }
+
+    main{padding:clamp(24px,5vw,40px)}
+    .qhead{
+      font-size:clamp(1.2rem,2.7vw,1.6rem);
+      font-weight:700;
+      margin:0 0 14px;
+      letter-spacing:-.01em;
+    }
+    .qsub{
+      color:var(--muted);
+      margin:0 0 18px;
+      font-size:.93rem;
+      line-height:1.6;
+    }
+    .multi-hint{
+      display:inline-block;
+      margin-top:4px;
+      font-size:.82rem;
+      color:var(--brand);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    }
+    .opt{
+      border-radius:var(--r-md);
+      padding:16px;
+      background:rgba(7,15,32,.72);
+      border:1px solid var(--line);
+      cursor:pointer;
+      user-select:none;
+      transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,background .16s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .opt::after{
+      content:"";
+      position:absolute;inset:-60% -10%;
+      background:radial-gradient(circle,rgba(167,211,123,.22),transparent 60%);
+      opacity:0;transition:opacity .16s ease;
+      pointer-events:none;
+    }
+    .opt:hover{
+      transform:translateY(-3px);
+      border-color:rgba(167,211,123,.7);
+      box-shadow:0 16px 28px rgba(5,12,26,.55);
+      background:rgba(8,18,34,.9);
+    }
+    .opt:hover::after{opacity:1}
+    .opt.selected{
+      border:1px solid rgba(167,211,123,.9);
+      box-shadow:0 0 0 1px rgba(167,211,123,.6);
+      background:linear-gradient(145deg,rgba(167,211,123,.25),rgba(17,35,45,.9));
+    }
     .opt input{display:none}
-    .hint{color:var(--muted);font-size:.88rem;margin:8px 0 0}
-    .controls{display:flex;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .summary{display:none;margin-top:18px}
-    .card{border:1px solid var(--line);border-radius:16px;background:rgba(6,14,28,.7);padding:16px}
-    .tag{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(8,19,36,.85);margin:6px 6px 0 0}
-    .hr{height:1px;background:var(--line);margin:18px 0}
-    .note{color:#ffe08a}
+    .pill{display:inline-flex;gap:10px;align-items:center;font-size:.97rem;letter-spacing:-.01em}
 
-    @media (max-width:640px){.masthead{flex-direction:column;align-items:flex-start}.btn,.row .btn{width:100%}}
+    .controls{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin-top:26px;
+      flex-wrap:wrap;
+    }
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{
+      padding:11px 16px;
+      border-radius:var(--r-sm);
+      border:1px solid var(--line);
+      background:rgba(6,15,30,.8);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:700;
+      font-size:.92rem;
+      transition:transform .14s ease,border-color .14s ease,background .14s ease,box-shadow .14s ease;
+    }
+    .btn:hover:not([disabled]){
+      transform:translateY(-1px);
+      border-color:rgba(167,211,123,.8);
+      background:rgba(10,20,38,.95);
+      box-shadow:0 10px 20px rgba(3,8,18,.7);
+    }
+    .btn[disabled]{opacity:.45;cursor:default;transform:none;box-shadow:none}
+    .btn.primary{
+      border:none;
+      background:linear-gradient(120deg,var(--brand),var(--brand-dark));
+      color:#041209;
+      box-shadow:0 14px 26px rgba(4,12,6,.7);
+    }
+    .btn.ghost{
+      background:transparent;
+      border-color:rgba(255,255,255,.18);
+      color:var(--muted);
+    }
+
+    .summary{display:none;margin-top:30px}
+    .summary h2{margin:0 0 14px;font-size:1.3rem}
+    #answers{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(8,19,36,.9);
+      border:1px solid var(--line);
+      font-size:.88rem;
+    }
+    .hr{height:1px;background:var(--line);margin:18px 0}
+    .help{font-size:.9rem;color:var(--muted);line-height:1.6}
+    .warning{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:var(--r-sm);
+      background:rgba(173,68,68,.16);
+      border:1px solid rgba(255,140,140,.7);
+      color:#ffd7d7;
+      font-size:.9rem;
+    }
+    .recommend-box{
+      margin:10px 0 18px;
+      padding:14px 16px;
+      border-radius:var(--r-md);
+      background:rgba(7,18,24,.95);
+      border:1px solid rgba(167,211,123,.8);
+    }
+    .recommend-title{font-weight:700;margin-bottom:4px;color:var(--brand)}
+    .footer-note{margin-top:22px;color:rgba(255,255,255,.55);font-size:.84rem}
+    .hidden{display:none !important}
+
+    @media (max-width:960px){
+      .masthead{flex-direction:column;align-items:flex-start}
+      .meta-grid{width:100%;grid-template-columns:1fr;text-align:left}
+    }
+    @media (max-width:640px){
+      body{padding:16px}
+      .grid{grid-template-columns:1fr}
+      .controls{flex-direction:column;align-items:stretch}
+      .row{width:100%;flex-direction:column}
+      .btn,.row .btn{width:100%;text-align:center}
+    }
   </style>
 </head>
 <body>
   <div class="shell">
     <header class="masthead">
       <div class="brand">
+        <!-- Logo-Pfad anpassen: z. B. ./Testudo.png wenn Bild im selben Ordner liegt -->
         <img class="logo-img" src="./assets/Testudo.png" alt="Testudo Logo">
         <div>
           <p class="eyebrow">Testudo</p>
           <h1 class="headline">Conversational UI for Insurance</h1>
-          <p class="lede">Digitaler Entscheidungshelfer, der Interessenten strukturiert zu passenden Gesundheitsversicherungen führt.</p>
+          <p class="lede">
+            Testudo unterstützt Versicherungsinteressenten dabei, strukturiert durch relevante Gesundheits- und Lebensfragen geführt zu werden,
+            um passende Versicherungsoptionen im Gesundheitsbereich zu identifizieren.
+          </p>
         </div>
       </div>
-      <div class="mast-actions">
-        <button class="btn" id="restartTop">Neu starten</button>
+      <div class="meta-grid">
+        <div class="stat">Developed by: Kaan · Kadir · Cetin · Mustafa</div>
+        <div class="stat">Projektstatus: UI-Dummy & Entscheidungslogik</div>
       </div>
     </header>
 
@@ -86,7 +314,10 @@
       <div class="app-header">
         <span class="label">Onboarding Wizard</span>
         <h2 class="wizard-title">Ihre Antworten führen zur Empfehlung</h2>
-        <p class="wizard-subtitle">Beantworten Sie die Fragen nacheinander. Sie können zurückspringen oder überspringen.</p>
+        <p class="wizard-subtitle">
+          Beantworten Sie die Fragen nacheinander. Sie können jederzeit zurückspringen oder eine Frage überspringen.
+          Am Ende erhalten Sie eine Empfehlung sowie einen Hinweis, wenn Angaben unklar geblieben sind.
+        </p>
         <div class="progress"><div class="bar" id="bar"></div></div>
       </div>
 
@@ -94,149 +325,239 @@
         <div id="question"></div>
 
         <div class="controls">
-          <button class="btn" id="prevBtn">Zurück</button>
+          <button class="btn ghost" id="restartBtn">Neu starten</button>
           <div class="row">
+            <button class="btn" id="prevBtn">Zurück</button>
             <button class="btn" id="skipBtn">Ich weiß es nicht</button>
             <button class="btn primary" id="nextBtn">Weiter</button>
           </div>
         </div>
 
         <section class="summary" id="summary">
-          <h2 style="margin:6px 0 10px">Zusammenfassung Ihrer Angaben</h2>
-          <div id="answers" class="card" style="margin-bottom:12px"></div>
-
-          <div id="unknownNote" class="card" style="display:none;background:rgba(255,196,0,.1);border-color:rgba(255,196,0,.35);color:#ffe9a6;margin-top:10px">
-            ⚠️ Einige Antworten wurden mit „Ich weiß es nicht“ angegeben. Sie können diese Fragen erneut durchgehen, um eine präzisere Empfehlung zu erhalten.
+          <h2>Ihre Angaben & Empfehlung</h2>
+          <div id="recommendation"></div>
+          <div id="unknownWarning" class="warning hidden">
+            Einige Fragen wurden mit <strong>„Ich weiß es nicht“</strong> beantwortet.
+            Für eine verlässliche Entscheidung sollten diese Antworten später gemeinsam mit einer Fachperson (z. B. Versicherungsberater) präzisiert werden.
           </div>
-
           <div class="hr"></div>
-          <div id="recommendation" class="card"></div>
-          <div class="row" style="margin-top:12px">
-            <button class="btn" id="restartBottom">Neu starten</button>
-          </div>
+          <div id="answers"></div>
+          <div class="hr"></div>
+          <p class="help">
+            Dieses UI dient als Konzept-Dummy. Die endgültige Tarif- und Produktempfehlung würde in einer realen Anwendung anhand realer Tarife und weiterer Kriterien automatisiert berechnet.
+          </p>
+          <button class="btn ghost" id="restartSummaryBtn">Fragen erneut durchgehen</button>
         </section>
+
+        <div class="footer-note">
+          MVP-Wizard · eine Frage pro Schritt · bedingte Sichtbarkeit · Mehrfachauswahl · einfache Empfehlung auf Basis von Alter, Einkommen, Gesundheit & Präferenzen
+        </div>
       </main>
     </div>
   </div>
 
   <script>
-    // ——— Fragenkatalog inkl. Unterauswahlen für Zusatzleistungen
+    // ——— Fragenkatalog ———
     const QUESTIONS = [
-      // Basis
-      { id:"age", title:"Wie alt sind Sie?", type:"single",
-        options:["18–29","30–39","40–59","ab 60"], required:true },
+      { id:"age", title:"Wie alt sind Sie?", type:"single", required:true,
+        options:["18–29","30–39","40–59","ab 60"] },
 
-      { id:"occupation", title:"Was ist Ihr aktueller Beruf?", type:"single",
-        options:["Beamter","Selbstständig","Angestellter","Auszubildender/Student","Arbeitslos","Rente"], required:true },
+      { id:"occupation", title:"Was ist Ihr aktueller Beruf?", type:"single", required:true,
+        options:["Beamter","Selbstständig","Angestellter","Auszubildender/Student","Arbeitslos","Rente"] },
 
-      { id:"income", title:"Wie hoch ist Ihr jährliches Bruttoeinkommen?", type:"single",
-        options:["Unter 20.000 €","20.001–40.000 €","40.001–69.299 €","Über 69.300 €"], required:true },
+      { id:"income", title:"Wie hoch ist Ihr jährliches Bruttoeinkommen?", type:"single", required:true,
+        options:["Unter 20.000 €","20.001–40.000 €","40.001–69.299 €","Über 69.300 €"] },
 
-      { id:"jobIntensity", title:"Wie körperlich intensiv ist Ihr Beruf?", type:"single",
+      { id:"jobIntensity", title:"Wie körperlich intensiv ist Ihr Beruf?", type:"single", required:false,
         options:["überwiegend sitzend","teilweise körperlich","stark körperlich"] },
 
-      // Zusatzleistungen (Stufe 1)
-      { id:"extrasImportance", title:"Sind Ihnen Zusatzleistungen wichtig?", type:"yesno" },
+      { id:"extrasImportance", title:"Sind Ihnen Zusatzleistungen wichtig?", type:"yesno", required:false },
 
-      { id:"extrasSelection", title:"Bitte wählen Sie Zusatzleistungen aus, die Ihnen wichtig sind", type:"multi",
-        visibleIf:a => a.extrasImportance==="Ja",
+      { id:"extrasSelection", title:"Welche Zusatzleistungen sind Ihnen wichtig?", type:"multi", required:false,
+        visibleIf:a => a.extrasImportance === "Ja",
         options:["Zusätzliche Zahnleistungen","Zusätzliche Reiseversicherungen","Zusätzliche Krankenhausleistungen"] },
 
-      // Unterauswahlen (Stufe 2)
-      { id:"extrasTeeth", title:"Zusätzliche Zahnleistungen (Mehrfachauswahl möglich)", type:"multi",
-        visibleIf:a => (a.extrasSelection||[]).includes("Zusätzliche Zahnleistungen"),
+      // Detailfragen zu Zusatzleistungen
+      { id:"extrasDental", title:"Welche zusätzlichen Zahnleistungen sind Ihnen wichtig?", type:"multi", required:false,
+        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Zahnleistungen"),
         options:["Zahnersatz","Prophylaxe","Zahnreinigung","Zahnfüllung","Zahnimplantate"] },
 
-      { id:"extrasTravel", title:"Zusätzliche Reiseversicherungen (Mehrfachauswahl möglich)", type:"multi",
-        visibleIf:a => (a.extrasSelection||[]).includes("Zusätzliche Reiseversicherungen"),
+      { id:"extrasTravel", title:"Welche zusätzlichen Reiseversicherungen sind Ihnen wichtig?", type:"multi", required:false,
+        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Reiseversicherungen"),
         options:["Reiserücktrittsversicherung","Reiseabbruchversicherung","Auslandskrankenversicherung","Reisegepäckversicherung","Reisehaftpflichtversicherung","Reiseunfallversicherung"] },
 
-      { id:"extrasHospital", title:"Zusätzliche Krankenhausleistungen (Mehrfachauswahl möglich)", type:"multi",
-        visibleIf:a => (a.extrasSelection||[]).includes("Zusätzliche Krankenhausleistungen"),
+      { id:"extrasHospital", title:"Welche zusätzlichen Krankenhausleistungen sind Ihnen wichtig?", type:"multi", required:false,
+        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Krankenhausleistungen"),
         options:["Krankenhaus-Komfort","Sehhilfen & Brille","Heilmethoden","Pflegevorsorge","Ambulant & Prävention"] },
 
-      // Familie / Kinder (Multi nur bei Alter; Rest Single)
-      { id:"maritalStatus", title:"Wie ist Ihr Familienstand?", type:"single",
-        options:["Ledig","In Partnerschaft","Verheiratet","Geschieden","Verwitwet"], required:true },
+      { id:"maritalStatus", title:"Wie ist Ihr Familienstand?", type:"single", required:true,
+        options:["Ledig","In Partnerschaft","Verheiratet","Geschieden","Verwitwet"] },
 
       { id:"hasChildren", title:"Haben Sie Kinder?", type:"yesno", required:true },
 
-      { id:"insureChildren", title:"Kinder mitversichern?", type:"yesno",
+      { id:"insureChildren", title:"Sollen Kinder mitversichert werden?", type:"yesno", required:false,
         visibleIf:a => a.hasChildren==="Ja" },
 
-      { id:"childrenAge", title:"Wie alt ist/sind Ihr(e) Kind(er)? (Mehrfachauswahl möglich)", type:"multi",
+      // Kinder: hier lassen wir Mehrfachwahl bei Alter (mehrere Kinder möglich)
+      { id:"childrenAge", title:"Wie alt ist / sind Ihr(e) Kind(er)?", type:"multi", required:false,
         visibleIf:a => a.insureChildren==="Ja",
         options:["unter 6 Jahre","6–17 Jahre","18–25 Jahre","über 25 Jahre"] },
 
-      { id:"childrenEducation", title:"Befinden sich Ihre Kinder in Ausbildung oder Studium?", type:"single",
+      { id:"childrenEducation", title:"Befinden sich Ihre Kinder in Ausbildung oder Studium?", type:"single", required:false,
         visibleIf:a => a.insureChildren==="Ja",
         options:["In der Schule","In Ausbildung","Im Studium","Nein"] },
 
-      { id:"childrenInsurance", title:"Wie sind Ihr(e) Kind(er) derzeit versichert?", type:"single",
+      { id:"childrenInsurance", title:"Wie sind Ihre Kinder derzeit versichert?", type:"single", required:false,
         visibleIf:a => a.insureChildren==="Ja",
         options:["über eine GKV","über eine PKV","aktuell nicht versichert"] },
 
-      // Gesundheit / Lifestyle (gekürzt)
-      { id:"chronicDiseases", title:"Haben Sie chronische Erkrankungen?", type:"yesno" },
-      { id:"dangerousSports", title:"Üben Sie gefährliche Sportarten aus?", type:"yesno" },
-      { id:"travel", title:"Reisen Sie regelmäßig?", type:"single",
-        options:["Ja, innerhalb der EU","Ja, außerhalb der EU","Nein"] }
+      { id:"childrenBenefits", title:"Welche Leistungen sind Ihnen für Ihre Kinder wichtig?", type:"multi", required:false,
+        visibleIf:a => a.insureChildren==="Ja",
+        options:["Zusätzliche Zahnleistungen","Zusätzliche Reiseversicherungen","Zusätzliche Krankenhausleistungen","Ich weiß es nicht"] },
+
+      { id:"specialistTreatment", title:"Sind Sie in regelmäßiger fachärztlicher Behandlung?", type:"yesno", required:false },
+
+      { id:"treatmentReason", title:"Erfolgt die fachärztliche Behandlung überwiegend aus Behandlungs- oder Vorsorgegründen?", type:"single", required:false,
+        visibleIf:a => a.specialistTreatment==="Ja",
+        options:["Überwiegend Behandlungsgründe","Überwiegend Vorsorgegründe","Beides in etwa gleich"] },
+
+      { id:"chronicDiseases", title:"Haben Sie chronische Erkrankungen?", type:"yesno", required:false },
+
+      { id:"chronicDiseaseTypes", title:"Welche chronischen Erkrankungen liegen vor?", type:"multi", required:false,
+        visibleIf:a => a.chronicDiseases==="Ja",
+        options:[
+          "Bluthochdruck / Herz-Kreislauf",
+          "Diabetes / Stoffwechsel",
+          "Asthma / Atemwege",
+          "Depression / psychische Erkrankung",
+          "Rücken-/Gelenkbeschwerden",
+          "Autoimmunerkrankung",
+          "Verdauungs-/Lebererkrankung",
+          "Nierenerkrankung",
+          "Krebs/Tumor (auch in Remission)"
+        ] },
+
+      { id:"careDegree", title:"Haben Sie einen Pflegegrad oder eine anerkannte Behinderung?", type:"yesno", required:false },
+
+      { id:"careDegreeLevel", title:"Welcher Pflegegrad liegt vor?", type:"single", required:false,
+        visibleIf:a => a.careDegree==="Ja",
+        options:["1","2","3","4","5"] },
+
+      { id:"travel", title:"Reisen Sie regelmäßig?", type:"single", required:false,
+        options:["Ja, innerhalb der EU","Ja, außerhalb der EU","Nein"] },
+
+      { id:"travelRegions", title:"In welche Regionen reisen Sie?", type:"multi", required:false,
+        visibleIf:a => a.travel==="Ja, innerhalb der EU" || a.travel==="Ja, außerhalb der EU",
+        options:["USA / Kanada","Afrika","Naher Osten","Asien / Australien","Südamerika"] },
+
+      { id:"dangerousSports", title:"Üben Sie gefährliche Sportarten aus?", type:"yesno", required:false },
+
+      { id:"sportsTypes", title:"Welche Art von Sport üben Sie aus?", type:"multi", required:false,
+        visibleIf:a => a.dangerousSports==="Ja",
+        options:["Hohes Risiko","Mittleres Risiko","Geringes Risiko"] },
+
+      { id:"smoking", title:"Rauchen Sie Zigaretten oder ähnliche Tabakwaren?", type:"single", required:false,
+        options:["Ja","Gelegentlich","Nein"] },
+
+      { id:"smokingType", title:"Was rauchen Sie überwiegend?", type:"single", required:false,
+        visibleIf:a => a.smoking==="Ja" || a.smoking==="Gelegentlich",
+        options:["Cannabis","Zigaretten","Cannabis und Zigaretten"] },
+
+      { id:"medicalCannabis", title:"Nutzen Sie Cannabis auf Rezept?", type:"yesno", required:false,
+        visibleIf:a => a.smokingType==="Cannabis" || a.smokingType==="Cannabis und Zigaretten" }
     ];
 
-    const state = { step:0, answers:{}, order:[] };
+    const state = {
+      step:0,
+      answers:{},
+      order:[]
+    };
 
     function recomputeOrder(){
       const visible = [];
       for(const q of QUESTIONS){
-        const ok = !q.visibleIf || q.visibleIf(state.answers);
-        if(ok){ visible.push(q); } else { delete state.answers[q.id]; }
+        const v = (typeof q.visibleIf === "function") ? !!q.visibleIf(state.answers) : true;
+        if(v){
+          visible.push(q);
+        }else{
+          delete state.answers[q.id];
+        }
       }
       state.order = visible;
-      if(state.step >= state.order.length) state.step = Math.max(0, state.order.length-1);
+      if(state.step >= state.order.length){
+        state.step = Math.max(0, state.order.length-1);
+      }
     }
 
     function render(){
       recomputeOrder();
       const q = state.order[state.step];
-      const box = document.getElementById('question');
-      if(!q){ showSummary(); return; }
+      const container = document.getElementById('question');
 
-      const current = state.answers[q.id];
-      const subtitle = (q.type==='multi') ? `<div class="hint">Mehrfachauswahl möglich</div>` : (q.subtitle?`<div class="qsub">${q.subtitle}</div>`:"");
-
-      const opt = (label, selected) =>
-        `<label class="opt ${selected?'selected':''}" data-value="${label}" role="button" tabindex="0">
-           <input ${q.type==='multi'?'type="checkbox"':'type="radio"'} name="${q.id}">
-           <span>${label}</span>
-         </label>`;
-
-      let optionsHTML = "";
-      if(q.type==='single'){
-        optionsHTML = `<div class="grid">${q.options.map(o=>opt(o,current===o)).join("")}</div>`;
-      }else if(q.type==='multi'){
-        const cur = Array.isArray(current)?current:[];
-        optionsHTML = `<div class="grid">${q.options.map(o=>opt(o,cur.includes(o))).join("")}</div>`;
-      }else if(q.type==='yesno'){
-        const ys=["Ja","Nein"];
-        optionsHTML = `<div class="grid">${ys.map(o=>opt(o,current===o)).join("")}</div>`;
+      if(!q){
+        showSummary();
+        return;
       }
 
-      box.innerHTML = `<div class="qhead">${q.title}</div>${subtitle||""}${optionsHTML}`;
+      const current = state.answers[q.id];
+      const hasSubtitle = !!q.subtitle;
+      const baseSub = q.subtitle ? `<div class="qsub">${q.subtitle}</div>` : "";
+      const multiHint = (q.type === "multi")
+        ? `<div class="multi-hint">Mehrfachauswahl möglich</div>`
+        : "";
 
-      // Interaktion
-      box.querySelectorAll('.opt').forEach(el=>{
+      let optionsHTML = "";
+
+      const opt = (label, selected) => `
+        <label class="opt ${selected ? "selected" : ""}" data-value="${label}">
+          <input type="${q.type === "multi" ? "checkbox" : "radio"}" name="${q.id}" />
+          <span class="pill">${label}</span>
+        </label>
+      `;
+
+      if(q.type === "single"){
+        optionsHTML = `<div class="grid">${
+          q.options.map(o => opt(o, current === o)).join("")
+        }</div>`;
+      }else if(q.type === "multi"){
+        const cur = Array.isArray(current) ? current : [];
+        optionsHTML = `<div class="grid">${
+          q.options.map(o => opt(o, cur.includes(o))).join("")
+        }</div>`;
+      }else if(q.type === "yesno"){
+        const ys = ["Ja","Nein"];
+        optionsHTML = `<div class="grid">${
+          ys.map(o => opt(o, current === o)).join("")
+        }</div>`;
+      }
+
+      container.innerHTML = `
+        <div class="qhead">${q.title}</div>
+        <div class="qsub">
+          ${hasSubtitle ? q.subtitle : ""}
+          ${multiHint}
+        </div>
+        ${optionsHTML}
+      `;
+
+      // Klicklogik inkl. Mehrfachauswahl
+      container.querySelectorAll('.opt').forEach(el=>{
         el.addEventListener('click', (e)=>{
           e.preventDefault();
           const value = el.dataset.value;
-          if(q.type==='multi'){
-            const arr = Array.isArray(state.answers[q.id]) ? [...state.answers[q.id]] : [];
-            const i = arr.indexOf(value);
-            (i>=0) ? arr.splice(i,1) : arr.push(value);
-            state.answers[q.id] = arr;
+          if(q.type === "multi"){
+            const existing = Array.isArray(state.answers[q.id]) ? [...state.answers[q.id]] : [];
+            const idx = existing.indexOf(value);
+            if(idx >= 0){
+              existing.splice(idx,1);
+            }else{
+              existing.push(value);
+            }
+            state.answers[q.id] = existing;
             el.classList.toggle('selected');
           }else{
             state.answers[q.id] = value;
-            box.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));
+            container.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
             el.classList.add('selected');
           }
           updateButtons();
@@ -246,6 +567,9 @@
       updateButtons();
       updateProgress();
       hideSummary();
+
+      // Scroll nach oben beim Schrittwechsel
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function isRequired(q){ return q.required === true; }
@@ -255,143 +579,169 @@
       if(!q) return true;
       const v = state.answers[q.id];
 
-      if(!isRequired(q)) return true;
-      if(q.type==='multi') return Array.isArray(v) && v.length>0;
+      if(!isRequired(q)) return true; // optionale Fragen blockieren "Weiter" nicht
+
+      if(q.type === "multi"){
+        return Array.isArray(v) && v.length > 0;
+      }
       return !!v;
     }
 
     function updateButtons(){
-      document.getElementById('prevBtn').disabled = state.step===0;
+      document.getElementById('prevBtn').disabled = state.step === 0;
       document.getElementById('nextBtn').disabled = !currentAnswered();
     }
 
     function updateProgress(){
       const total = Math.max(1, state.order.length);
-      const pct = Math.round((state.step)/total*100);
+      const pct = Math.round((state.step) / total * 100);
       document.getElementById('bar').style.width = `${pct}%`;
+    }
+
+    // Einfache Empfehlungslogik am Ende
+    function buildRecommendation(answers){
+      let base = "Empfehlung: ";
+      let details = [];
+
+      const income = answers.income;
+      const age = answers.age;
+      const chronic = answers.chronicDiseases === "Ja";
+      const care = answers.careDegree === "Ja";
+
+      const wantsExtras = answers.extrasImportance === "Ja";
+      const extras = Array.isArray(answers.extrasSelection) ? answers.extrasSelection : [];
+      const travels = answers.travel && answers.travel !== "Nein";
+      const hasKids = answers.hasChildren === "Ja";
+      const insureKids = answers.insureChildren === "Ja";
+
+      const highIncome = income === "Über 69.300 €";
+      const midIncome = income === "40.001–69.299 €" || income === "40.001–69.299 €" || income === "40.001–69.299 €";
+
+      // Basisempfehlung
+      if(highIncome && !care){
+        base += "Private Krankenversicherung (PKV) prüfen.";
+        details.push("Durch Ihr Einkommen können Sie die Option einer PKV prüfen. Wichtig sind dabei Gesundheitszustand und langfristige Beitragsstabilität.");
+      }else if(chronic || care){
+        base += "Gesetzliche Krankenversicherung (GKV) als stabile Basis.";
+        details.push("Aufgrund bestehender gesundheitlicher Einschränkungen kann die GKV als solide und verlässliche Basis sinnvoller sein.");
+      }else{
+        base += "GKV mit gezielten Zusatzversicherungen.";
+        details.push("Eine Kombination aus GKV und gut gewählten Zusatzversicherungen passt voraussichtlich gut zu Ihrem Profil.");
+      }
+
+      // Zusatzempfehlungen
+      if(wantsExtras || extras.length > 0){
+        if(extras.includes("Zusätzliche Zahnleistungen")){
+          details.push("Zahnzusatzversicherung zur Abdeckung von Zahnersatz, Prophylaxe und professioneller Zahnreinigung sinnvoll.");
+        }
+        if(extras.includes("Zusätzliche Reiseversicherungen") || travels){
+          details.push("Auslandskrankenversicherung und ggf. Reiserücktritt-/Reiseabbruchversicherung für regelmäßige Reisen empfohlen.");
+        }
+        if(extras.includes("Zusätzliche Krankenhausleistungen")){
+          details.push("Krankenhauszusatz (z. B. Wahlleistungen, Komfort) kann Ihren stationären Schutz spürbar verbessern.");
+        }
+      }
+
+      if(hasKids && insureKids){
+        details.push("Für Kinder können insbesondere Zahn- und Krankenhauszusatzversicherungen interessant sein, je nach Alter und Versicherungsstatus.");
+      }
+
+      return { base, details };
     }
 
     function showSummary(){
       document.getElementById('question').classList.add('hidden');
       document.querySelector('.controls').classList.add('hidden');
-      const s = document.getElementById('summary'); s.style.display='block';
+      const s = document.getElementById('summary');
+      const answersBox = document.getElementById('answers');
+      const recBox = document.getElementById('recommendation');
+      const unknownWarning = document.getElementById('unknownWarning');
 
-      // Antwortenliste
-      const answered = QUESTIONS.filter(q => state.answers[q.id] !== undefined && (!q.visibleIf || q.visibleIf(state.answers)));
-      document.getElementById('answers').innerHTML = answered.map(q=>{
+      s.style.display = "block";
+
+      const answered = QUESTIONS.filter(q => {
+        if(state.answers[q.id] === undefined) return false;
+        if(typeof q.visibleIf === "function"){
+          return !!q.visibleIf(state.answers);
+        }
+        return true;
+      });
+
+      let hasUnknown = false;
+      const tags = answered.map(q => {
         const v = state.answers[q.id];
-        const val = Array.isArray(v)? v.join(", ") : (v ?? "—");
+        let val = Array.isArray(v) ? v.join(", ") : v;
+        if(val === undefined || val === null || val === "") val = "—";
+        if(val === "Ich weiß es nicht" || (Array.isArray(v) && v.includes("Ich weiß es nicht"))){
+          hasUnknown = true;
+        }
         return `<div class="tag"><strong>${q.title}:</strong>&nbsp; ${val}</div>`;
       }).join("");
 
-      // Hinweis bei "Ich weiß es nicht"
-      const hasUnknown = Object.values(state.answers).some(v => v==="Ich weiß es nicht" || (Array.isArray(v) && v.includes("Ich weiß es nicht")));
-      document.getElementById('unknownNote').style.display = hasUnknown ? 'block' : 'none';
+      answersBox.innerHTML = tags || "<p class='help'>Es liegen noch keine Antworten vor.</p>";
 
-      // Empfehlung ausgeben
-      document.getElementById('recommendation').innerHTML = buildRecommendation(state.answers);
+      const { base, details } = buildRecommendation(state.answers);
+      recBox.innerHTML = `
+        <div class="recommend-box">
+          <div class="recommend-title">${base}</div>
+          ${details.map(d => `<div>• ${d}</div>`).join("")}
+        </div>
+      `;
 
-      // Voller Balken
+      if(hasUnknown){
+        unknownWarning.classList.remove('hidden');
+      }else{
+        unknownWarning.classList.add('hidden');
+      }
+
       document.getElementById('bar').style.width = "100%";
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function hideSummary(){
-      document.getElementById('summary').style.display='none';
+      document.getElementById('summary').style.display = "none";
       document.getElementById('question').classList.remove('hidden');
       document.querySelector('.controls').classList.remove('hidden');
     }
 
-    // ——— Einfache Empfehlungslogik
-    function buildRecommendation(a){
-      // Groblogik PKV-Eligibility (vereinfachte Heuristik):
-      const highIncome = a.income === "Über 69.300 €";
-      const isStudent = a.occupation === "Auszubildender/Student";
-      const pkvEligible = highIncome && !isStudent;
-
-      // Basispfad
-      let base = pkvEligible ? "PKV prüfen" : "GKV beibehalten";
-      let details = [];
-
-      // Kinder / Familienlogik (hinweisartig)
-      if(a.hasChildren==="Ja" && a.insureChildren==="Ja"){
-        if(a.childrenInsurance==="über eine GKV" && pkvEligible){
-          details.push("Kinder: Prüfen, ob private Mitversicherung sinnvoll ist (abhängig vom anderen Elternteil & Einkommen).");
-        } else if(a.childrenInsurance==="über eine GKV"){
-          details.push("Kinder: Familienversicherung in der GKV i. d. R. beitragsfrei.");
-        }
-      }
-
-      // Zusatzleistungen Ableitung
-      const extras = a.extrasSelection || [];
-      if(!pkvEligible){
-        // GKV + Zusätze
-        if(extras.includes("Zusätzliche Zahnleistungen")){
-          const z = (a.extrasTeeth||[]).length ? ` (${(a.extrasTeeth||[]).join(", ")})` : "";
-          details.push("Zahnzusatzversicherung empfohlen"+z+".");
-        }
-        if(extras.includes("Zusätzliche Reiseversicherungen")){
-          const r = (a.extrasTravel||[]).length ? ` (${(a.extrasTravel||[]).join(", ")})` : "";
-          details.push("Reiseversicherung(en) empfohlen"+r+".");
-        }
-        if(extras.includes("Zusätzliche Krankenhausleistungen")){
-          const k = (a.extrasHospital||[]).length ? ` (${(a.extrasHospital||[]).join(", ")})` : "";
-          details.push("Krankenhaus-/Ambulant-Zusätze prüfen"+k+".");
-        }
-      }else{
-        // PKV: Zusätze oft im Tarif integrierbar
-        if(extras.length){
-          details.push("PKV-Tarif mit gewünschten Leistungen wählen: "+extras.join(", ") + ".");
-        }else{
-          details.push("PKV-Tarif mit ausgewogenem Leistungsumfang (Stationär/ Zahn / Ambulant) auswählen.");
-        }
-      }
-
-      // Gesundheit / Lifestyle Hinweise
-      if(a.chronicDiseases==="Ja"){
-        details.push("Chronische Erkrankungen vorhanden: mit Risikozuschlägen/Annahmen in PKV rechnen; ggf. GKV + Zusatz vorteilhaft.");
-      }
-      if(a.dangerousSports==="Ja"){
-        details.push("Gefährliche Sportarten: Leistungen für Unfälle/Stationär prüfen.");
-      }
-      if(a.travel && a.travel!=="Nein"){
-        details.push("Regelmäßige Reisen: Auslandskrankenversicherung sinnvoll.");
-      }
-
-      // Ausgabe
-      return `
-        <div style="display:flex;gap:12px;align-items:flex-start">
-          <div style="min-width:10px;height:auto;background:var(--brand);border-radius:6px"></div>
-          <div>
-            <h3 style="margin:0 0 6px">Empfehlung</h3>
-            <p style="margin:0 0 8px"><strong>${base}</strong></p>
-            ${details.length? `<ul style="margin:6px 0 0 18px">${details.map(d=>`<li>${d}</li>`).join("")}</ul>` : "<p>Für eine genauere Empfehlung fehlten Angaben.</p>"}
-          </div>
-        </div>
-      `;
-    }
-
-    // Navigation
-    document.getElementById('prevBtn').addEventListener('click', ()=>{ if(state.step>0){ state.step--; render(); } });
-    document.getElementById('nextBtn').addEventListener('click', ()=>{ (state.step < state.order.length-1) ? (state.step++, render()) : showSummary(); });
-    document.getElementById('skipBtn').addEventListener('click', ()=>{
-      const q = state.order[state.step];
-      if(!isRequired(q)) state.answers[q.id] = "Ich weiß es nicht";
-      (state.step < state.order.length-1) ? (state.step++, render()) : showSummary();
-    });
-
-    function restart(){
+    function restartWizard(){
       state.step = 0;
       state.answers = {};
-      state.order = [];
-      document.getElementById('summary').style.display='none';
-      document.getElementById('question').classList.remove('hidden');
-      document.querySelector('.controls').classList.remove('hidden');
-      document.getElementById('bar').style.width = "0%";
+      recomputeOrder();
       render();
-      window.scrollTo({top:0,behavior:"smooth"});
     }
-    document.getElementById('restartTop').addEventListener('click', restart);
-    document.getElementById('restartBottom').addEventListener('click', restart);
+
+    // Buttons
+    document.getElementById('prevBtn').addEventListener('click', ()=>{
+      if(state.step > 0){
+        state.step--;
+        render();
+      }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', ()=>{
+      if(state.step < state.order.length - 1){
+        state.step++;
+        render();
+      }else{
+        showSummary();
+      }
+    });
+
+    document.getElementById('skipBtn').addEventListener('click', ()=>{
+      const q = state.order[state.step];
+      // „Ich weiß es nicht“ speichert Unklarheit
+      state.answers[q.id] = "Ich weiß es nicht";
+      if(state.step < state.order.length - 1){
+        state.step++;
+        render();
+      }else{
+        showSummary();
+      }
+    });
+
+    document.getElementById('restartBtn').addEventListener('click', restartWizard);
+    document.getElementById('restartSummaryBtn').addEventListener('click', restartWizard);
 
     // Start
     render();
