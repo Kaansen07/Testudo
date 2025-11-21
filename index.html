@@ -4,9 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Testudo – Entscheidungsassistent</title>
-  <!-- Favicon / Browser-Icon -->
-  <link rel="icon" href="Testudo.png" type="image/png" />
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap');
 
@@ -20,6 +17,7 @@
       --line:rgba(255,255,255,.08);
       --brand:#A7D37B;             /* Hauptfarbe Testudo */
       --brand-dark:#4F7A3C;
+      --danger:#ff9c9c;
       --r-lg:26px; --r-md:18px; --r-sm:12px;
       --shadow:0 32px 80px rgba(5,11,25,.55);
     }
@@ -39,8 +37,7 @@
         radial-gradient(ellipse at bottom, rgba(15,34,43,.7), transparent 60%),
         var(--bg);
       color:var(--text);
-      overflow-y:auto;
-      scroll-behavior:smooth;
+      overflow-y:auto;   /* scrollen erlaubt */
     }
     body::before{
       content:"";
@@ -206,27 +203,44 @@
       background:linear-gradient(145deg,rgba(167,211,123,.25),rgba(17,35,45,.9));
     }
     .opt input{display:none}
-    .pill{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      font-size:.97rem;
-      letter-spacing:-.01em;
-    }
+    .pill{display:inline-flex;gap:10px;align-items:center;font-size:.97rem;letter-spacing:-.01em}
 
     .info-icon{
       display:inline-flex;
-      align-items:center;
       justify-content:center;
+      align-items:center;
       width:18px;
       height:18px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,.35);
+      border:1px solid rgba(255,255,255,.4);
       font-size:.7rem;
-      font-weight:700;
-      color:var(--muted);
-      cursor:help;
-      background:rgba(7,15,30,.9);
+      margin-left:6px;
+      color:rgba(255,255,255,.85);
+      position:relative;
+    }
+    .info-icon::after{
+      content:attr(data-tooltip);
+      position:absolute;
+      left:50%;
+      top:120%;
+      transform:translateX(-50%);
+      white-space:normal;
+      min-width:180px;
+      max-width:260px;
+      background:rgba(5,10,18,.95);
+      color:var(--text);
+      border-radius:8px;
+      padding:8px 10px;
+      font-size:.78rem;
+      line-height:1.4;
+      box-shadow:0 12px 22px rgba(0,0,0,.6);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .12s ease;
+      z-index:20;
+    }
+    .info-icon:hover::after{
+      opacity:1;
     }
 
     .controls{
@@ -270,21 +284,21 @@
 
     .summary{display:none;margin-top:30px}
     .summary h2{margin:0 0 14px;font-size:1.3rem}
-
-    .summary-group-title{
+    #answers{display:block}
+    .group-title{
       margin:18px 0 6px;
       font-size:1.05rem;
-      color:var(--brand);
       font-weight:700;
+      color:var(--brand);
+      letter-spacing:.03em;
+      text-transform:uppercase;
     }
-    .summary-group{
+    .group-grid{
       display:flex;
       flex-wrap:wrap;
       gap:8px;
+      margin-bottom:6px;
     }
-
-    #answers{margin-top:6px;}
-
     .tag{
       display:inline-flex;align-items:center;gap:6px;
       padding:8px 12px;
@@ -304,7 +318,6 @@
       color:#ffd7d7;
       font-size:.9rem;
     }
-
     .recommend-box{
       margin:10px 0 18px;
       padding:14px 16px;
@@ -319,28 +332,32 @@
       margin-bottom:8px;
     }
     .recommend-logo{
-      width:40px;
-      height:40px;
-      border-radius:10px;
+      width:56px;
+      height:56px;
+      border-radius:14px;
       object-fit:contain;
-      border:1px solid rgba(255,255,255,.2);
+      border:1px solid rgba(255,255,255,.18);
       background:#0d1720;
-      padding:3px;
+      padding:4px;
     }
-    .recommend-title{
-      font-weight:800;
+    .recommend-label{
+      font-size:.8rem;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      color:rgba(255,255,255,.7);
+    }
+    .recommend-core{
+      font-weight:700;
+      font-size:1rem;
+      margin-top:2px;
       color:var(--brand);
-      font-size:1.05rem;
-      margin-bottom:2px;
     }
-    .recommend-base{
-      font-weight:600;
-      font-size:.95rem;
-    }
-    .recommend-details{
+    .recommend-list{
+      margin:8px 0 0;
+      padding-left:18px;
       font-size:.9rem;
-      margin-top:6px;
       color:var(--muted);
+      line-height:1.5;
     }
 
     .footer-note{margin-top:22px;color:rgba(255,255,255,.55);font-size:.84rem}
@@ -356,6 +373,7 @@
       .controls{flex-direction:column;align-items:stretch}
       .row{width:100%;flex-direction:column}
       .btn,.row .btn{width:100%;text-align:center}
+      .recommend-header{align-items:flex-start}
     }
   </style>
 </head>
@@ -363,8 +381,8 @@
   <div class="shell">
     <header class="masthead">
       <div class="brand">
-        <!-- Logo-Pfad ggf. anpassen -->
-        <img class="logo-img" src="Testudo.png" alt="Testudo Logo">
+        <!-- Logo-Pfad anpassen: z. B. ./Testudo.png wenn Bild im selben Ordner liegt -->
+        <img class="logo-img" src="./assets/Testudo.png" alt="Testudo Logo">
         <div>
           <p class="eyebrow">Testudo</p>
           <h1 class="headline">Conversational UI for Insurance</h1>
@@ -408,28 +426,34 @@
           <div id="recommendation"></div>
           <div id="unknownWarning" class="warning hidden">
             Einige Fragen wurden mit <strong>„Ich weiß es nicht“</strong> beantwortet.
-            Für eine verlässliche Entscheidung sollten Sie diese Fragen neu beantworten
-            oder gemeinsam mit einer Fachperson besprechen.
+            Für eine verlässliche Entscheidung sollten Sie diese Fragen neu beantworten oder gemeinsam mit einer Fachperson besprechen.
           </div>
           <div class="hr"></div>
           <div id="answers"></div>
           <div class="hr"></div>
           <p class="help">
-            Dieses UI dient als Konzept-Dummy. Die endgültige Tarif- und Produktempfehlung würde in einer realen Anwendung anhand realer Tarife
-            und weiterer Kriterien automatisiert berechnet.
+            Dieses UI dient als Konzept-Dummy. Die endgültige Tarif- und Produktempfehlung würde in einer realen Anwendung anhand realer Tarife und weiterer Kriterien automatisiert berechnet.
           </p>
           <button class="btn ghost" id="restartSummaryBtn">Fragen erneut durchgehen</button>
         </section>
 
         <div class="footer-note">
-          Testudo – Projektdummy
+          Testudo – Projektdummy · keine echte Tarifberatung
         </div>
       </main>
     </div>
   </div>
 
   <script>
-    // Fragenkatalog mit Kategorien
+    // Kategorien für die Zusammenfassung
+    const CATEGORY_TITLES = {
+      personal: "Persönliche Angaben",
+      extras: "Zusatzleistungen",
+      health: "Gesundheitssituation",
+      lifestyle: "Lifestyle"
+    };
+
+    // ——— Fragenkatalog ———
     const QUESTIONS = [
       // Persönliche Angaben
       { id:"age", title:"Wie alt sind Sie?", type:"single", required:true, category:"personal",
@@ -444,7 +468,12 @@
       { id:"jobIntensity", title:"Wie körperlich intensiv ist Ihr Beruf?", type:"single", required:false, category:"personal",
         options:["überwiegend sitzend","teilweise körperlich","stark körperlich"] },
 
-      // Zusatzleistungen
+      { id:"maritalStatus", title:"Wie ist Ihr Familienstand?", type:"single", required:true, category:"personal",
+        options:["Ledig","In Partnerschaft","Verheiratet","Geschieden","Verwitwet"] },
+
+      { id:"hasChildren", title:"Haben Sie Kinder?", type:"yesno", required:true, category:"personal" },
+
+      // Zusatzleistungen (Erwachsene)
       { id:"extrasImportance", title:"Sind Ihnen Zusatzleistungen wichtig?", type:"yesno", required:false, category:"extras" },
 
       { id:"extrasSelection", title:"Welche Zusatzleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"extras",
@@ -463,12 +492,7 @@
         visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Krankenhausleistungen"),
         options:["Krankenhaus-Komfort","Sehhilfen & Brille","Heilmethoden","Pflegevorsorge","Ambulant & Prävention"] },
 
-      // Kinder / Familie (persönlich & extras)
-      { id:"maritalStatus", title:"Wie ist Ihr Familienstand?", type:"single", required:true, category:"personal",
-        options:["Ledig","In Partnerschaft","Verheiratet","Geschieden","Verwitwet"] },
-
-      { id:"hasChildren", title:"Haben Sie Kinder?", type:"yesno", required:true, category:"personal" },
-
+      // Kinder (Zusatzleistungen & Basics) – gehört zu Zusatzleistungen / Gesundheit
       { id:"insureChildren", title:"Sollen Kinder mitversichert werden?", type:"yesno", required:false, category:"personal",
         visibleIf:a => a.hasChildren==="Ja" },
 
@@ -525,33 +549,16 @@
         visibleIf:a => a.travel==="Ja, innerhalb der EU" || a.travel==="Ja, außerhalb der EU",
         options:["USA / Kanada","Afrika","Naher Osten","Asien / Australien","Südamerika"] },
 
-      { id:"dangerousSports", title:"Üben Sie gefährliche Sportarten aus?", type:"yesno", required:false, category:"lifestyle" },
+      { id:"dangerousSports", title:"Üben Sie gefährliche Sportarten oder Freizeitaktivitäten aus?", type:"yesno", required:false, category:"lifestyle" },
 
-      {
-        id:"sportsTypes",
-        title:"Welche Art von Sport üben Sie aus?",
-        type:"multi",
-        required:false,
-        category:"lifestyle",
+      { id:"sportsTypes", title:"Wie würden Sie Ihr Risikoniveau bei Sport / Hobbys einstufen?", type:"multi", required:false, category:"lifestyle",
+        subtitle:"Die Beispiele helfen nur bei der Einordnung und werden nicht einzeln gespeichert.",
         visibleIf:a => a.dangerousSports==="Ja",
         options:[
-          {
-            value:"Hohes Risiko",
-            label:"Hohes Risiko",
-            info:"z. B. Freeclimbing, Basejumping, Fallschirmspringen, Motocross"
-          },
-          {
-            value:"Mittleres Risiko",
-            label:"Mittleres Risiko",
-            info:"z. B. Skifahren (Off-Piste), Reitsport, Kampfsportarten"
-          },
-          {
-            value:"Geringes Risiko",
-            label:"Geringes Risiko",
-            info:"z. B. Joggen, Fitnessstudio, Yoga, Schwimmen"
-          }
-        ]
-      },
+          "Hohes Risiko – z. B. Fallschirmspringen, Freeclimbing, Motorradrennsport",
+          "Mittleres Risiko – z. B. Skifahren, Mountainbiken, Gerätetauchen",
+          "Geringes Risiko – z. B. Joggen, Fitnessstudio, Schwimmen"
+        ] },
 
       { id:"smoking", title:"Rauchen Sie Zigaretten oder ähnliche Tabakwaren?", type:"single", required:false, category:"lifestyle",
         options:["Ja","Gelegentlich","Nein"] },
@@ -564,7 +571,11 @@
         visibleIf:a => a.smokingType==="Cannabis" || a.smokingType==="Cannabis und Zigaretten" }
     ];
 
-    const state = { step:0, answers:{}, order:[] };
+    const state = {
+      step:0,
+      answers:{},
+      order:[]
+    };
 
     function recomputeOrder(){
       const visible = [];
@@ -593,63 +604,44 @@
       }
 
       const current = state.answers[q.id];
+      const hasSubtitle = !!q.subtitle;
+      const baseSub = hasSubtitle ? q.subtitle : "";
       const multiHint = (q.type === "multi")
-        ? `<div class="multi-hint">Mehrfachauswahl möglich</div>`
+        ? `<span class="multi-hint">Mehrfachauswahl möglich</span>`
         : "";
 
-      // Option-Renderer, unterstützt Strings & Objekte (für Tooltips)
-      function renderOption(option, selected){
-        let value, label, info;
-        if(typeof option === "string"){
-          value = label = option;
-          info = null;
-        }else{
-          value = option.value;
-          label = option.label;
-          info = option.info || null;
-        }
-        const infoHtml = info
-          ? `<span class="info-icon" title="${info}">i</span>`
-          : "";
-        return `
-          <label class="opt ${selected ? "selected" : ""}" data-value="${value}">
-            <input type="${q.type === "multi" ? "checkbox" : "radio"}" name="${q.id}" />
-            <span class="pill">
-              <span>${label}</span>
-              ${infoHtml}
-            </span>
-          </label>
-        `;
-      }
-
       let optionsHTML = "";
+
+      const opt = (label, selected) => `
+        <label class="opt ${selected ? "selected" : ""}" data-value="${label}">
+          <input type="${q.type === "multi" ? "checkbox" : "radio"}" name="${q.id}" />
+          <span class="pill">${label}</span>
+        </label>
+      `;
+
       if(q.type === "single"){
         optionsHTML = `<div class="grid">${
-          q.options.map(o => renderOption(o, current === (typeof o === "string" ? o : o.value))).join("")
+          q.options.map(o => opt(o, current === o)).join("")
         }</div>`;
       }else if(q.type === "multi"){
         const cur = Array.isArray(current) ? current : [];
         optionsHTML = `<div class="grid">${
-          q.options.map(o => {
-            const value = (typeof o === "string") ? o : o.value;
-            return renderOption(o, cur.includes(value));
-          }).join("")
+          q.options.map(o => opt(o, cur.includes(o))).join("")
         }</div>`;
       }else if(q.type === "yesno"){
         const ys = ["Ja","Nein"];
         optionsHTML = `<div class="grid">${
-          ys.map(o => renderOption(o, current === o)).join("")
+          ys.map(o => opt(o, current === o)).join("")
         }</div>`;
       }
 
       container.innerHTML = `
         <div class="qhead">${q.title}</div>
         <div class="qsub">
-          ${q.subtitle ? q.subtitle : ""}
-          ${multiHint}
+          ${hasSubtitle ? baseSub : ""} ${multiHint}
         </div>
         ${optionsHTML}
-      ";
+      `;
 
       // Klicklogik inkl. Mehrfachauswahl
       container.querySelectorAll('.opt').forEach(el=>{
@@ -678,6 +670,8 @@
       updateButtons();
       updateProgress();
       hideSummary();
+
+      // Scroll nach oben beim Schrittwechsel
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -709,52 +703,49 @@
 
     // Empfehlungslogik
     function buildRecommendation(answers){
-      let baseText = "";
+      let core = "";
       const details = [];
 
       const income = answers.income;
       const chronic = answers.chronicDiseases === "Ja";
       const care = answers.careDegree === "Ja";
-      const wantsExtras = answers.extrasImportance === "Ja";
       const extras = Array.isArray(answers.extrasSelection) ? answers.extrasSelection : [];
+      const wantsExtras = answers.extrasImportance === "Ja";
       const travels = answers.travel && answers.travel !== "Nein";
       const hasKids = answers.hasChildren === "Ja";
       const insureKids = answers.insureChildren === "Ja";
 
       const highIncome = income === "Über 69.300 €";
-      const midIncome = income === "40.001–69.299 €";
 
-      if(highIncome && !care){
-        baseText = "eine private Krankenversicherung (PKV) – unter genauer Prüfung der gesundheitlichen Situation.";
-        details.push("Durch Ihr Einkommen besteht grundsätzlich die Möglichkeit, in die PKV zu wechseln. Wichtig sind dabei Gesundheitszustand, Familienplanung und die langfristige Beitragsentwicklung.");
+      if(highIncome && !care && !chronic){
+        core = "die Prüfung einer Privaten Krankenversicherung (PKV) mit Fokus auf langfristige Beitragsstabilität.";
+        details.push("Durch Ihr Einkommen besteht grundsätzlich die Möglichkeit, eine PKV in Betracht zu ziehen.");
+        details.push("Wichtig sind eine sorgfältige Gesundheitsprüfung und ein Vergleich mehrerer Tarife.");
       }else if(chronic || care){
-        baseText = "die gesetzliche Krankenversicherung (GKV) als stabile Basis.";
-        details.push("Aufgrund bestehender gesundheitlicher Einschränkungen kann die GKV als verlässliche und solidarisch finanzierte Basis sinnvoller sein als ein Wechsel in die PKV.");
-      }else if(midIncome){
-        baseText = "die GKV mit gut abgestimmten Zusatzversicherungen.";
-        details.push("Mit Ihrem Einkommen kann eine starke GKV-Basis kombiniert mit ausgewählten Zusatzleistungen (z. B. Zahn, Krankenhaus, Reisen) ein ausgewogenes Preis-Leistungs-Verhältnis bieten.");
+        core = "eine solide Absicherung in der Gesetzlichen Krankenversicherung (GKV) mit gezielten Zusatzversicherungen.";
+        details.push("Aufgrund bestehender gesundheitlicher Einschränkungen kann die GKV als stabile Basis sinnvoll sein.");
       }else{
-        baseText = "die GKV mit gezielten Zusatzversicherungen, passend zu Ihrem Bedarf.";
-        details.push("Gerade bei geringerem Einkommen ist die GKV als Basis sinnvoll. Einzelne Zusatzbausteine können gezielt Lücken schließen, ohne die monatliche Belastung zu stark zu erhöhen.");
+        core = "eine Kombination aus GKV als Basis und ausgewählten Zusatzversicherungen.";
+        details.push("Damit lassen sich Kosten und Leistungsumfang gut ausbalancieren.");
       }
 
       if(wantsExtras || extras.length > 0){
-        if(extras.includes("Zusätzliche Zahnleistungen")){
-          details.push("Eine Zahnzusatzversicherung kann die Eigenanteile bei Zahnersatz, Prophylaxe und professioneller Zahnreinigung deutlich reduzieren.");
+        if(extras.includes("Zusätzliche Zahnleistungen") || Array.isArray(answers.extrasDental)){
+          details.push("Eine Zahnzusatzversicherung kann Leistungen für Zahnersatz, Prophylaxe und professionelle Zahnreinigung deutlich verbessern.");
         }
         if(extras.includes("Zusätzliche Reiseversicherungen") || travels){
-          details.push("Bei regelmäßigen Reisen empfiehlt sich eine Auslandskrankenversicherung und – je nach Reisetyp – eine Rücktritts- bzw. Abbruchversicherung.");
+          details.push("Für regelmäßige Reisen sind Auslandskrankenversicherung und ggf. Reise­rücktritt-/Reiseabbruchversicherung sinnvoll.");
         }
-        if(extras.includes("Zusätzliche Krankenhausleistungen")){
-          details.push("Krankenhauszusatzleistungen (Komfort, Wahlleistungen) können Ihnen im stationären Fall mehr Wahlfreiheit und Komfort bieten.");
+        if(extras.includes("Zusätzliche Krankenhausleistungen") || Array.isArray(answers.extrasHospital)){
+          details.push("Ein Krankenhauszusatztarif (z. B. Wahlleistungen, Komfort) kann den stationären Aufenthalt aufwerten.");
         }
       }
 
       if(hasKids && insureKids){
-        details.push("Für Kinder können insbesondere Zahn- und Krankenhauszusatzversicherungen relevant sein – abhängig vom aktuellen Versicherungsstatus und der geplanten Laufzeit.");
+        details.push("Für Kinder können Zahn- und Krankenhauszusatzversicherungen interessant sein – insbesondere bei hohem Behandlungsbedarf oder privaten Bildungsplänen.");
       }
 
-      return { baseText, details };
+      return { core, details };
     }
 
     function showSummary(){
@@ -775,58 +766,52 @@
         return true;
       });
 
+      // Antworten gruppieren
+      const grouped = {
+        personal: [],
+        extras: [],
+        health: [],
+        lifestyle: []
+      };
+
       let hasUnknown = false;
 
-      const groupsConfig = [
-        { id:"personal",  title:"Persönliche Angaben" },
-        { id:"extras",    title:"Zusatzleistungen" },
-        { id:"health",    title:"Gesundheitssituation" },
-        { id:"lifestyle", title:"Lifestyle" }
-      ];
-      const groupHtml = {};
-      groupsConfig.forEach(g => groupHtml[g.id] = []);
-
-      answered.forEach(q => {
+      for(const q of answered){
         const v = state.answers[q.id];
         let val = Array.isArray(v) ? v.join(", ") : v;
         if(val === undefined || val === null || val === "") val = "—";
         if(val === "Ich weiß es nicht" || (Array.isArray(v) && v.includes("Ich weiß es nicht"))){
           hasUnknown = true;
         }
-        const tag = `<div class="tag"><strong>${q.title}:</strong>&nbsp; ${val}</div>`;
         const cat = q.category || "personal";
-        if(!groupHtml[cat]) groupHtml[cat] = [];
-        groupHtml[cat].push(tag);
-      });
+        grouped[cat].push({ title:q.title, value:val });
+      }
 
-      const groupsMarkup = groupsConfig
-        .map(g => {
-          const items = groupHtml[g.id];
-          if(!items || items.length === 0) return "";
-          return `
-            <h3 class="summary-group-title">${g.title}</h3>
-            <div class="summary-group">
-              ${items.join("")}
-            </div>
-          `;
-        })
-        .join("");
+      let html = "";
+      for(const key of Object.keys(CATEGORY_TITLES)){
+        const items = grouped[key];
+        if(!items || !items.length) continue;
+        html += `<div class="group-title">${CATEGORY_TITLES[key]}</div>`;
+        html += `<div class="group-grid">`;
+        html += items.map(item => `
+          <div class="tag"><strong>${item.title}:</strong>&nbsp; ${item.value}</div>
+        `).join("");
+        html += `</div>`;
+      }
 
-      answersBox.innerHTML = groupsMarkup || "<p class='help'>Es liegen noch keine Antworten vor.</p>";
+      answersBox.innerHTML = html || "<p class='help'>Es liegen noch keine Antworten vor.</p>";
 
-      const { baseText, details } = buildRecommendation(state.answers);
+      const { core, details } = buildRecommendation(state.answers);
       recBox.innerHTML = `
         <div class="recommend-box">
           <div class="recommend-header">
-            <img src="Testudo.png" alt="Testudo Logo" class="recommend-logo" />
+            <img src="./assets/Testudo.png" alt="Testudo Icon" class="recommend-logo">
             <div>
-              <div class="recommend-title">Testudo empfiehlt</div>
-              <div class="recommend-base">${baseText}</div>
+              <div class="recommend-label">Testudo empfiehlt</div>
+              <div class="recommend-core">${core || "Ihre Angaben noch einmal zu prüfen und ggf. mit einer Beratung zu ergänzen."}</div>
             </div>
           </div>
-          <div class="recommend-details">
-            ${details.map(d => `<div>• ${d}</div>`).join("")}
-          </div>
+          ${details.length ? `<ul class="recommend-list">${details.map(d => `<li>${d}</li>`).join("")}</ul>` : ""}
         </div>
       `;
 
