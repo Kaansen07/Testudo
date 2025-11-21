@@ -432,6 +432,24 @@
       { id:"jobIntensity", title:"Wie körperlich intensiv ist Ihr Beruf?", type:"single", required:false, category:"personal",
         options:["überwiegend sitzend","teilweise körperlich","stark körperlich"] },
 
+      { id:"extrasImportance", title:"Sind Ihnen Zusatzleistungen wichtig?", type:"yesno", required:false, category:"addons" },
+
+      { id:"extrasSelection", title:"Welche Zusatzleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"addons",
+        visibleIf:a => a.extrasImportance === "Ja",
+        options:["Zusätzliche Zahnleistungen","Zusätzliche Reiseversicherungen","Zusätzliche Krankenhausleistungen"] },
+
+      { id:"extrasDental", title:"Welche zusätzlichen Zahnleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"addons",
+        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Zahnleistungen"),
+        options:["Zahnersatz","Prophylaxe","Zahnreinigung","Zahnfüllung","Zahnimplantate"] },
+
+      { id:"extrasTravel", title:"Welche zusätzlichen Reiseversicherungen sind Ihnen wichtig?", type:"multi", required:false, category:"addons",
+        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Reiseversicherungen"),
+        options:["Reiserücktrittsversicherung","Reiseabbruchversicherung","Auslandskrankenversicherung","Reisegepäckversicherung","Reisehaftpflichtversicherung","Reiseunfallversicherung"] },
+
+      { id:"extrasHospital", title:"Welche zusätzlichen Krankenhausleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"addons",
+        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Krankenhausleistungen"),
+        options:["Krankenhaus-Komfort","Sehhilfen & Brille","Heilmethoden","Pflegevorsorge","Ambulant & Prävention"] },
+
       { id:"maritalStatus", title:"Wie ist Ihr Familienstand?", type:"single", required:true, category:"personal",
         options:["Ledig","In Partnerschaft","Verheiratet","Geschieden","Verwitwet"] },
 
@@ -452,7 +470,7 @@
         visibleIf:a => a.insureChildren==="Ja",
         options:["über eine GKV","über eine PKV","aktuell nicht versichert"] },
 
-      // Zusatzleistungen – Erwachsene
+      /* Zusatzleistungen – Erwachsene
       { id:"extrasImportance", title:"Sind Ihnen Zusatzleistungen wichtig?", type:"yesno", required:false, category:"addons" },
 
       { id:"extrasSelection", title:"Welche Zusatzleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"addons",
@@ -469,7 +487,7 @@
 
       { id:"extrasHospital", title:"Welche zusätzlichen Krankenhausleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"addons",
         visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Krankenhausleistungen"),
-        options:["Krankenhaus-Komfort","Sehhilfen & Brille","Heilmethoden","Pflegevorsorge","Ambulant & Prävention"] },
+        options:["Krankenhaus-Komfort","Sehhilfen & Brille","Heilmethoden","Pflegevorsorge","Ambulant & Prävention"] }, */
 
       // Zusatzleistungen – Kinder
       { id:"childrenBenefits", title:"Welche Zusatzleistungen sind Ihnen für Ihre Kinder wichtig?", type:"multi", required:false, category:"addons",
@@ -869,3 +887,4 @@
   </script>
 </body>
 </html>
+
