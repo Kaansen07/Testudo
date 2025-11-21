@@ -204,6 +204,38 @@
     .opt input{display:none}
     .pill{display:inline-flex;gap:10px;align-items:center;font-size:.97rem;letter-spacing:-.01em}
 
+    /* Info-Tooltip für Sport-Risiko */
+    .info-dot{
+      width:18px;height:18px;border-radius:999px;border:1px solid rgba(255,255,255,.65);
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:.75rem;margin-left:8px;color:rgba(255,255,255,.85);
+      position:relative;flex-shrink:0;
+    }
+    .info-dot::after{
+      content:attr(data-info);
+      position:absolute;
+      left:50%;top:115%;
+      transform:translateX(-50%);
+      background:rgba(3,8,16,.96);
+      color:var(--text);
+      border-radius:10px;
+      padding:8px 10px;
+      font-size:.78rem;
+      width:max(220px, 28ch);
+      max-width:260px;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .16s ease,transform .16s ease;
+      border:1px solid rgba(255,255,255,.22);
+      z-index:10;
+      text-align:left;
+      line-height:1.4;
+    }
+    .info-dot:hover::after{
+      opacity:1;
+      transform:translate(-50%, 4px);
+    }
+
     .controls{
       display:flex;
       justify-content:space-between;
@@ -245,7 +277,20 @@
 
     .summary{display:none;margin-top:30px}
     .summary h2{margin:0 0 14px;font-size:1.3rem}
-    #answers{display:flex;flex-wrap:wrap;gap:8px}
+    #answers{display:flex;flex-direction:column;gap:14px}
+    .answer-group-title{
+      font-weight:700;
+      margin:10px 0 4px;
+      color:var(--brand);
+      font-size:.95rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .answer-group-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
     .tag{
       display:inline-flex;align-items:center;gap:6px;
       padding:8px 12px;
@@ -350,80 +395,97 @@
         </section>
 
         <div class="footer-note">
-          Testudo - Projektdummy
+          Testudo – Projektdummy · Version: MVP Wizard
         </div>
       </main>
     </div>
   </div>
 
   <script>
+    // Kategorienamen für die Gruppierung im Summary
+    const CATEGORY_LABELS = {
+      personal: "Persönliche Angaben",
+      addons: "Zusatzleistungen",
+      health: "Gesundheitssituation",
+      lifestyle: "Lifestyle"
+    };
+
+    // Info-Texte für Sport-Risiko
+    const SPORTS_INFO = {
+      "Hohes Risiko": "Beispiele: Klettern, Fallschirmspringen, Motorsport, Tiefseetauchen.",
+      "Mittleres Risiko": "Beispiele: Skifahren, Snowboarden, Mountainbiken, Kampfsport.",
+      "Geringes Risiko": "Beispiele: Joggen, Fitnessstudio, Schwimmen, Yoga."
+    };
+
     // ——— Fragenkatalog ———
     const QUESTIONS = [
-      { id:"age", title:"Wie alt sind Sie?", type:"single", required:true,
+      // Persönliche Angaben
+      { id:"age", title:"Wie alt sind Sie?", type:"single", required:true, category:"personal",
         options:["18–29","30–39","40–59","ab 60"] },
 
-      { id:"occupation", title:"Was ist Ihr aktueller Beruf?", type:"single", required:true,
+      { id:"occupation", title:"Was ist Ihr aktueller Beruf?", type:"single", required:true, category:"personal",
         options:["Beamter","Selbstständig","Angestellter","Auszubildender/Student","Arbeitslos","Rente"] },
 
-      { id:"income", title:"Wie hoch ist Ihr jährliches Bruttoeinkommen?", type:"single", required:true,
+      { id:"income", title:"Wie hoch ist Ihr jährliches Bruttoeinkommen?", type:"single", required:true, category:"personal",
         options:["Unter 20.000 €","20.001–40.000 €","40.001–69.299 €","Über 69.300 €"] },
 
-      { id:"jobIntensity", title:"Wie körperlich intensiv ist Ihr Beruf?", type:"single", required:false,
+      { id:"jobIntensity", title:"Wie körperlich intensiv ist Ihr Beruf?", type:"single", required:false, category:"personal",
         options:["überwiegend sitzend","teilweise körperlich","stark körperlich"] },
 
-      { id:"extrasImportance", title:"Sind Ihnen Zusatzleistungen wichtig?", type:"yesno", required:false },
-
-      { id:"extrasSelection", title:"Welche Zusatzleistungen sind Ihnen wichtig?", type:"multi", required:false,
-        visibleIf:a => a.extrasImportance === "Ja",
-        options:["Zusätzliche Zahnleistungen","Zusätzliche Reiseversicherungen","Zusätzliche Krankenhausleistungen"] },
-
-      // Detailfragen zu Zusatzleistungen
-      { id:"extrasDental", title:"Welche zusätzlichen Zahnleistungen sind Ihnen wichtig?", type:"multi", required:false,
-        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Zahnleistungen"),
-        options:["Zahnersatz","Prophylaxe","Zahnreinigung","Zahnfüllung","Zahnimplantate"] },
-
-      { id:"extrasTravel", title:"Welche zusätzlichen Reiseversicherungen sind Ihnen wichtig?", type:"multi", required:false,
-        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Reiseversicherungen"),
-        options:["Reiserücktrittsversicherung","Reiseabbruchversicherung","Auslandskrankenversicherung","Reisegepäckversicherung","Reisehaftpflichtversicherung","Reiseunfallversicherung"] },
-
-      { id:"extrasHospital", title:"Welche zusätzlichen Krankenhausleistungen sind Ihnen wichtig?", type:"multi", required:false,
-        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Krankenhausleistungen"),
-        options:["Krankenhaus-Komfort","Sehhilfen & Brille","Heilmethoden","Pflegevorsorge","Ambulant & Prävention"] },
-
-      { id:"maritalStatus", title:"Wie ist Ihr Familienstand?", type:"single", required:true,
+      { id:"maritalStatus", title:"Wie ist Ihr Familienstand?", type:"single", required:true, category:"personal",
         options:["Ledig","In Partnerschaft","Verheiratet","Geschieden","Verwitwet"] },
 
-      { id:"hasChildren", title:"Haben Sie Kinder?", type:"yesno", required:true },
+      { id:"hasChildren", title:"Haben Sie Kinder?", type:"yesno", required:true, category:"personal" },
 
-      { id:"insureChildren", title:"Sollen Kinder mitversichert werden?", type:"yesno", required:false,
+      { id:"insureChildren", title:"Sollen Kinder mitversichert werden?", type:"yesno", required:false, category:"personal",
         visibleIf:a => a.hasChildren==="Ja" },
 
-      // Kinder: hier lassen wir Mehrfachwahl bei Alter (mehrere Kinder möglich)
-      { id:"childrenAge", title:"Wie alt ist / sind Ihr(e) Kind(er)?", type:"multi", required:false,
+      { id:"childrenAge", title:"Wie alt ist / sind Ihr(e) Kind(er)?", type:"multi", required:false, category:"personal",
         visibleIf:a => a.insureChildren==="Ja",
         options:["unter 6 Jahre","6–17 Jahre","18–25 Jahre","über 25 Jahre"] },
 
-      { id:"childrenEducation", title:"Befinden sich Ihre Kinder in Ausbildung oder Studium?", type:"single", required:false,
+      { id:"childrenEducation", title:"Befinden sich Ihre Kinder in Ausbildung oder Studium?", type:"single", required:false, category:"personal",
         visibleIf:a => a.insureChildren==="Ja",
         options:["In der Schule","In Ausbildung","Im Studium","Nein"] },
 
-      { id:"childrenInsurance", title:"Wie sind Ihre Kinder derzeit versichert?", type:"single", required:false,
+      { id:"childrenInsurance", title:"Wie sind Ihre Kinder derzeit versichert?", type:"single", required:false, category:"personal",
         visibleIf:a => a.insureChildren==="Ja",
         options:["über eine GKV","über eine PKV","aktuell nicht versichert"] },
 
-      { id:"childrenBenefits", title:"Welche Leistungen sind Ihnen für Ihre Kinder wichtig?", type:"multi", required:false,
+      // Zusatzleistungen – Erwachsene
+      { id:"extrasImportance", title:"Sind Ihnen Zusatzleistungen wichtig?", type:"yesno", required:false, category:"addons" },
+
+      { id:"extrasSelection", title:"Welche Zusatzleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"addons",
+        visibleIf:a => a.extrasImportance === "Ja",
+        options:["Zusätzliche Zahnleistungen","Zusätzliche Reiseversicherungen","Zusätzliche Krankenhausleistungen"] },
+
+      { id:"extrasDental", title:"Welche zusätzlichen Zahnleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"addons",
+        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Zahnleistungen"),
+        options:["Zahnersatz","Prophylaxe","Zahnreinigung","Zahnfüllung","Zahnimplantate"] },
+
+      { id:"extrasTravel", title:"Welche zusätzlichen Reiseversicherungen sind Ihnen wichtig?", type:"multi", required:false, category:"addons",
+        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Reiseversicherungen"),
+        options:["Reiserücktrittsversicherung","Reiseabbruchversicherung","Auslandskrankenversicherung","Reisegepäckversicherung","Reisehaftpflichtversicherung","Reiseunfallversicherung"] },
+
+      { id:"extrasHospital", title:"Welche zusätzlichen Krankenhausleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"addons",
+        visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Krankenhausleistungen"),
+        options:["Krankenhaus-Komfort","Sehhilfen & Brille","Heilmethoden","Pflegevorsorge","Ambulant & Prävention"] },
+
+      // Zusatzleistungen – Kinder
+      { id:"childrenBenefits", title:"Welche Zusatzleistungen sind Ihnen für Ihre Kinder wichtig?", type:"multi", required:false, category:"addons",
         visibleIf:a => a.insureChildren==="Ja",
         options:["Zusätzliche Zahnleistungen","Zusätzliche Reiseversicherungen","Zusätzliche Krankenhausleistungen","Ich weiß es nicht"] },
 
-      { id:"specialistTreatment", title:"Sind Sie in regelmäßiger fachärztlicher Behandlung?", type:"yesno", required:false },
+      // Gesundheitssituation
+      { id:"specialistTreatment", title:"Sind Sie in regelmäßiger fachärztlicher Behandlung?", type:"yesno", required:false, category:"health" },
 
-      { id:"treatmentReason", title:"Erfolgt die fachärztliche Behandlung überwiegend aus Behandlungs- oder Vorsorgegründen?", type:"single", required:false,
+      { id:"treatmentReason", title:"Erfolgt die fachärztliche Behandlung überwiegend aus Behandlungs- oder Vorsorgegründen?", type:"single", required:false, category:"health",
         visibleIf:a => a.specialistTreatment==="Ja",
         options:["Überwiegend Behandlungsgründe","Überwiegend Vorsorgegründe","Beides in etwa gleich"] },
 
-      { id:"chronicDiseases", title:"Haben Sie chronische Erkrankungen?", type:"yesno", required:false },
+      { id:"chronicDiseases", title:"Haben Sie chronische Erkrankungen?", type:"yesno", required:false, category:"health" },
 
-      { id:"chronicDiseaseTypes", title:"Welche chronischen Erkrankungen liegen vor?", type:"multi", required:false,
+      { id:"chronicDiseaseTypes", title:"Welche chronischen Erkrankungen liegen vor?", type:"multi", required:false, category:"health",
         visibleIf:a => a.chronicDiseases==="Ja",
         options:[
           "Bluthochdruck / Herz-Kreislauf",
@@ -437,33 +499,34 @@
           "Krebs/Tumor (auch in Remission)"
         ] },
 
-      { id:"careDegree", title:"Haben Sie einen Pflegegrad oder eine anerkannte Behinderung?", type:"yesno", required:false },
+      { id:"careDegree", title:"Haben Sie einen Pflegegrad oder eine anerkannte Behinderung?", type:"yesno", required:false, category:"health" },
 
-      { id:"careDegreeLevel", title:"Welcher Pflegegrad liegt vor?", type:"single", required:false,
+      { id:"careDegreeLevel", title:"Welcher Pflegegrad liegt vor?", type:"single", required:false, category:"health",
         visibleIf:a => a.careDegree==="Ja",
         options:["1","2","3","4","5"] },
 
-      { id:"travel", title:"Reisen Sie regelmäßig?", type:"single", required:false,
+      // Lifestyle
+      { id:"travel", title:"Reisen Sie regelmäßig?", type:"single", required:false, category:"lifestyle",
         options:["Ja, innerhalb der EU","Ja, außerhalb der EU","Nein"] },
 
-      { id:"travelRegions", title:"In welche Regionen reisen Sie?", type:"multi", required:false,
+      { id:"travelRegions", title:"In welche Regionen reisen Sie?", type:"multi", required:false, category:"lifestyle",
         visibleIf:a => a.travel==="Ja, innerhalb der EU" || a.travel==="Ja, außerhalb der EU",
         options:["USA / Kanada","Afrika","Naher Osten","Asien / Australien","Südamerika"] },
 
-      { id:"dangerousSports", title:"Üben Sie gefährliche Sportarten aus?", type:"yesno", required:false },
+      { id:"dangerousSports", title:"Üben Sie gefährliche Sportarten aus?", type:"yesno", required:false, category:"lifestyle" },
 
-      { id:"sportsTypes", title:"Welche Art von Sport üben Sie aus?", type:"multi", required:false,
+      { id:"sportsTypes", title:"Welche Art von Sport üben Sie aus?", type:"multi", required:false, category:"lifestyle",
         visibleIf:a => a.dangerousSports==="Ja",
         options:["Hohes Risiko","Mittleres Risiko","Geringes Risiko"] },
 
-      { id:"smoking", title:"Rauchen Sie Zigaretten oder ähnliche Tabakwaren?", type:"single", required:false,
+      { id:"smoking", title:"Rauchen Sie Zigaretten oder ähnliche Tabakwaren?", type:"single", required:false, category:"lifestyle",
         options:["Ja","Gelegentlich","Nein"] },
 
-      { id:"smokingType", title:"Was rauchen Sie überwiegend?", type:"single", required:false,
+      { id:"smokingType", title:"Was rauchen Sie überwiegend?", type:"single", required:false, category:"lifestyle",
         visibleIf:a => a.smoking==="Ja" || a.smoking==="Gelegentlich",
         options:["Cannabis","Zigaretten","Cannabis und Zigaretten"] },
 
-      { id:"medicalCannabis", title:"Nutzen Sie Cannabis auf Rezept?", type:"yesno", required:false,
+      { id:"medicalCannabis", title:"Nutzen Sie Cannabis auf Rezept?", type:"yesno", required:false, category:"lifestyle",
         visibleIf:a => a.smokingType==="Cannabis" || a.smokingType==="Cannabis und Zigaretten" }
     ];
 
@@ -500,41 +563,42 @@
       }
 
       const current = state.answers[q.id];
-      const hasSubtitle = !!q.subtitle;
-      const baseSub = q.subtitle ? `<div class="qsub">${q.subtitle}</div>` : "";
       const multiHint = (q.type === "multi")
         ? `<div class="multi-hint">Mehrfachauswahl möglich</div>`
         : "";
 
-      let optionsHTML = "";
-
-      const opt = (label, selected) => `
+      const opt = (label, selected, extraInfo) => `
         <label class="opt ${selected ? "selected" : ""}" data-value="${label}">
           <input type="${q.type === "multi" ? "checkbox" : "radio"}" name="${q.id}" />
-          <span class="pill">${label}</span>
+          <span class="pill">
+            ${label}
+            ${extraInfo ? `<span class="info-dot" data-info="${extraInfo}">i</span>` : ""}
+          </span>
         </label>
       `;
 
+      let optionsHTML = "";
+
       if(q.type === "single"){
         optionsHTML = `<div class="grid">${
-          q.options.map(o => opt(o, current === o)).join("")
+          q.options.map(o => opt(o, current === o, (q.id==="sportsTypes" ? SPORTS_INFO[o] : null))).join("")
         }</div>`;
       }else if(q.type === "multi"){
         const cur = Array.isArray(current) ? current : [];
         optionsHTML = `<div class="grid">${
-          q.options.map(o => opt(o, cur.includes(o))).join("")
+          q.options.map(o => opt(o, cur.includes(o), (q.id==="sportsTypes" ? SPORTS_INFO[o] : null))).join("")
         }</div>`;
       }else if(q.type === "yesno"){
         const ys = ["Ja","Nein"];
         optionsHTML = `<div class="grid">${
-          ys.map(o => opt(o, current === o)).join("")
+          ys.map(o => opt(o, current === o, null)).join("")
         }</div>`;
       }
 
       container.innerHTML = `
         <div class="qhead">${q.title}</div>
         <div class="qsub">
-          ${hasSubtitle ? q.subtitle : ""}
+          ${q.subtitle ? q.subtitle : ""}
           ${multiHint}
         </div>
         ${optionsHTML}
@@ -601,12 +665,14 @@
     // Einfache Empfehlungslogik am Ende
     function buildRecommendation(answers){
       let base = "Empfehlung: ";
-      let details = [];
+      const details = [];
 
       const income = answers.income;
       const age = answers.age;
       const chronic = answers.chronicDiseases === "Ja";
       const care = answers.careDegree === "Ja";
+      const highIncome = income === "Über 69.300 €";
+      const midIncome = income === "40.001–69.299 €";
 
       const wantsExtras = answers.extrasImportance === "Ja";
       const extras = Array.isArray(answers.extrasSelection) ? answers.extrasSelection : [];
@@ -614,39 +680,91 @@
       const hasKids = answers.hasChildren === "Ja";
       const insureKids = answers.insureChildren === "Ja";
 
-      const highIncome = income === "Über 69.300 €";
-      const midIncome = income === "40.001–69.299 €" || income === "40.001–69.299 €" || income === "40.001–69.299 €";
+      const sportsRisk = Array.isArray(answers.sportsTypes) ? answers.sportsTypes : [];
+      const smoker = answers.smoking === "Ja" || answers.smoking === "Gelegentlich";
 
-      // Basisempfehlung
-      if(highIncome && !care){
-        base += "Private Krankenversicherung (PKV) prüfen.";
-        details.push("Durch Ihr Einkommen können Sie die Option einer PKV prüfen. Wichtig sind dabei Gesundheitszustand und langfristige Beitragsstabilität.");
+      // Basisempfehlung PKV / GKV
+      if(highIncome && !care && !chronic){
+        base += "Option auf Private Krankenversicherung (PKV) prüfen.";
+        details.push("Durch Ihr Einkommen können Sie die Option einer PKV prüfen. Gesundheitszustand, Familienplanung und Beitragsentwicklung sollten detailliert betrachtet werden.");
       }else if(chronic || care){
-        base += "Gesetzliche Krankenversicherung (GKV) als stabile Basis.";
-        details.push("Aufgrund bestehender gesundheitlicher Einschränkungen kann die GKV als solide und verlässliche Basis sinnvoller sein.");
+        base += "Gesetzliche Krankenversicherung (GKV) als verlässliche Basis.";
+        details.push("Aufgrund vorliegender chronischer Erkrankungen oder eines Pflegegrads ist die GKV in vielen Fällen die stabilere und kalkulierbarere Basis.");
+      }else if(midIncome){
+        base += "GKV mit ausgewählten Zusatzversicherungen.";
+        details.push("Eine solide GKV-Basis in Kombination mit sinnvollen Zusatzversicherungen (z. B. Zahn, Krankenhaus, Reisen) passt voraussichtlich gut zu Ihrem Profil.");
       }else{
-        base += "GKV mit gezielten Zusatzversicherungen.";
-        details.push("Eine Kombination aus GKV und gut gewählten Zusatzversicherungen passt voraussichtlich gut zu Ihrem Profil.");
+        base += "GKV als Basis, Zusatzversicherungen nach Bedarf.";
+        details.push("Aufgrund Ihrer Angaben ist eine GKV-Basis mit optionalen Ergänzungen meist die pragmatischste Lösung.");
       }
 
-      // Zusatzempfehlungen
+      // Zusatzleistungen Erwachsener
       if(wantsExtras || extras.length > 0){
         if(extras.includes("Zusätzliche Zahnleistungen")){
-          details.push("Zahnzusatzversicherung zur Abdeckung von Zahnersatz, Prophylaxe und professioneller Zahnreinigung sinnvoll.");
+          details.push("Eine Zahnzusatzversicherung kann Kosten für Zahnersatz, Prophylaxe und professionelle Zahnreinigung deutlich reduzieren.");
         }
         if(extras.includes("Zusätzliche Reiseversicherungen") || travels){
-          details.push("Auslandskrankenversicherung und ggf. Reiserücktritt-/Reiseabbruchversicherung für regelmäßige Reisen empfohlen.");
+          details.push("Wenn Sie regelmäßig reisen, sind Auslandskrankenversicherung sowie ggf. Reise­rücktritts- und Reiseabbruchversicherung sinnvoll.");
         }
         if(extras.includes("Zusätzliche Krankenhausleistungen")){
-          details.push("Krankenhauszusatz (z. B. Wahlleistungen, Komfort) kann Ihren stationären Schutz spürbar verbessern.");
+          details.push("Krankenhauszusatzversicherungen (z. B. Einbettzimmer, Chefarzt) können Ihren stationären Schutz deutlich verbessern.");
         }
       }
 
+      // Kinder
       if(hasKids && insureKids){
-        details.push("Für Kinder können insbesondere Zahn- und Krankenhauszusatzversicherungen interessant sein, je nach Alter und Versicherungsstatus.");
+        details.push("Für Kinder können insbesondere Zahnzusatz- und Krankenhauszusatzversicherungen interessant sein, je nach Alter, Schul- bzw. Ausbildungssituation und aktuellem Versicherungsstatus.");
+      }
+
+      // Risiko & Lifestyle
+      if(sportsRisk.includes("Hohes Risiko")){
+        details.push("Aufgrund der hohen Risikosportarten sollten Unfall- und Berufsunfähigkeitsabsicherungen geprüft werden.");
+      }else if(sportsRisk.includes("Mittleres Risiko")){
+        details.push("Mittlere Risikosportarten können Einfluss auf Risikozuschläge haben – eine Beratung zur Einkommensabsicherung ist sinnvoll.");
+      }
+
+      if(smoker){
+        details.push("Rauchen kann Beiträge in bestimmten Versicherungen erhöhen. Eine ehrliche Angabe ist wichtig, um späteren Problemen vorzubeugen.");
       }
 
       return { base, details };
+    }
+
+    // Gruppierung der Antworten in Summary
+    function groupAnswersForSummary(){
+      const groups = {
+        personal: [],
+        addons: [],
+        health: [],
+        lifestyle: []
+      };
+
+      let hasUnknown = false;
+
+      const answeredQuestions = QUESTIONS.filter(q => {
+        const val = state.answers[q.id];
+        if(val === undefined) return false;
+        if(typeof q.visibleIf === "function" && !q.visibleIf(state.answers)) return false;
+        return true;
+      });
+
+      for(const q of answeredQuestions){
+        const raw = state.answers[q.id];
+        let val = Array.isArray(raw) ? raw.join(", ") : raw;
+        if(val === undefined || val === null || val === "") val = "—";
+        if(
+          val === "Ich weiß es nicht" ||
+          (Array.isArray(raw) && raw.includes("Ich weiß es nicht"))
+        ){
+          hasUnknown = true;
+        }
+
+        const cat = q.category || "personal";
+        if(!groups[cat]) groups[cat] = [];
+        groups[cat].push({ title:q.title, value:val });
+      }
+
+      return { groups, hasUnknown };
     }
 
     function showSummary(){
@@ -659,27 +777,30 @@
 
       s.style.display = "block";
 
-      const answered = QUESTIONS.filter(q => {
-        if(state.answers[q.id] === undefined) return false;
-        if(typeof q.visibleIf === "function"){
-          return !!q.visibleIf(state.answers);
-        }
-        return true;
-      });
+      const { groups, hasUnknown } = groupAnswersForSummary();
 
-      let hasUnknown = false;
-      const tags = answered.map(q => {
-        const v = state.answers[q.id];
-        let val = Array.isArray(v) ? v.join(", ") : v;
-        if(val === undefined || val === null || val === "") val = "—";
-        if(val === "Ich weiß es nicht" || (Array.isArray(v) && v.includes("Ich weiß es nicht"))){
-          hasUnknown = true;
-        }
-        return `<div class="tag"><strong>${q.title}:</strong>&nbsp; ${val}</div>`;
+      // Antworten nach Gruppen rendern
+      const order = ["personal","addons","health","lifestyle"];
+      const html = order.map(cat => {
+        const entries = groups[cat];
+        if(!entries || entries.length === 0) return "";
+        return `
+          <div>
+            <div class="answer-group-title">${CATEGORY_LABELS[cat]}</div>
+            <div class="answer-group-tags">
+              ${entries.map(e => `
+                <div class="tag">
+                  <strong>${e.title}:</strong>&nbsp; ${e.value}
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
       }).join("");
 
-      answersBox.innerHTML = tags || "<p class='help'>Es liegen noch keine Antworten vor.</p>";
+      answersBox.innerHTML = html || "<p class='help'>Es liegen noch keine Antworten vor.</p>";
 
+      // Empfehlung
       const { base, details } = buildRecommendation(state.answers);
       recBox.innerHTML = `
         <div class="recommend-box">
@@ -688,6 +809,7 @@
         </div>
       `;
 
+      // Hinweis bei „Ich weiß es nicht“
       if(hasUnknown){
         unknownWarning.classList.remove('hidden');
       }else{
@@ -730,7 +852,6 @@
 
     document.getElementById('skipBtn').addEventListener('click', ()=>{
       const q = state.order[state.step];
-      // „Ich weiß es nicht“ speichert Unklarheit
       state.answers[q.id] = "Ich weiß es nicht";
       if(state.step < state.order.length - 1){
         state.step++;
@@ -748,4 +869,3 @@
   </script>
 </body>
 </html>
-
