@@ -456,72 +456,73 @@
     // ——— Fragenkatalog ———
     const QUESTIONS = [
       // Persönliche Angaben
-      { id:"age", title:"Wie alt sind Sie?", type:"single", required:true, category:"personal",
+      // ——— Fragenkatalog ———
+    const QUESTIONS = [
+      { id:"age", title:"Wie alt sind Sie?", type:"single", required:true,
         options:["18–29","30–39","40–59","ab 60"] },
 
-      { id:"occupation", title:"Was ist Ihr aktueller Beruf?", type:"single", required:true, category:"personal",
+      { id:"occupation", title:"Was ist Ihr aktueller Beruf?", type:"single", required:true,
         options:["Beamter","Selbstständig","Angestellter","Auszubildender/Student","Arbeitslos","Rente"] },
 
-      { id:"income", title:"Wie hoch ist Ihr jährliches Bruttoeinkommen?", type:"single", required:true, category:"personal",
+      { id:"income", title:"Wie hoch ist Ihr jährliches Bruttoeinkommen?", type:"single", required:true,
         options:["Unter 20.000 €","20.001–40.000 €","40.001–69.299 €","Über 69.300 €"] },
 
-      { id:"jobIntensity", title:"Wie körperlich intensiv ist Ihr Beruf?", type:"single", required:false, category:"personal",
+      { id:"jobIntensity", title:"Wie körperlich intensiv ist Ihr Beruf?", type:"single", required:false,
         options:["überwiegend sitzend","teilweise körperlich","stark körperlich"] },
 
-      { id:"maritalStatus", title:"Wie ist Ihr Familienstand?", type:"single", required:true, category:"personal",
-        options:["Ledig","In Partnerschaft","Verheiratet","Geschieden","Verwitwet"] },
+      { id:"extrasImportance", title:"Sind Ihnen Zusatzleistungen wichtig?", type:"yesno", required:false },
 
-      { id:"hasChildren", title:"Haben Sie Kinder?", type:"yesno", required:true, category:"personal" },
-
-      // Zusatzleistungen (Erwachsene)
-      { id:"extrasImportance", title:"Sind Ihnen Zusatzleistungen wichtig?", type:"yesno", required:false, category:"extras" },
-
-      { id:"extrasSelection", title:"Welche Zusatzleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"extras",
+      { id:"extrasSelection", title:"Welche Zusatzleistungen sind Ihnen wichtig?", type:"multi", required:false,
         visibleIf:a => a.extrasImportance === "Ja",
         options:["Zusätzliche Zahnleistungen","Zusätzliche Reiseversicherungen","Zusätzliche Krankenhausleistungen"] },
 
-      { id:"extrasDental", title:"Welche zusätzlichen Zahnleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"extras",
+      // Detailfragen zu Zusatzleistungen
+      { id:"extrasDental", title:"Welche zusätzlichen Zahnleistungen sind Ihnen wichtig?", type:"multi", required:false,
         visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Zahnleistungen"),
         options:["Zahnersatz","Prophylaxe","Zahnreinigung","Zahnfüllung","Zahnimplantate"] },
 
-      { id:"extrasTravel", title:"Welche zusätzlichen Reiseversicherungen sind Ihnen wichtig?", type:"multi", required:false, category:"extras",
+      { id:"extrasTravel", title:"Welche zusätzlichen Reiseversicherungen sind Ihnen wichtig?", type:"multi", required:false,
         visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Reiseversicherungen"),
         options:["Reiserücktrittsversicherung","Reiseabbruchversicherung","Auslandskrankenversicherung","Reisegepäckversicherung","Reisehaftpflichtversicherung","Reiseunfallversicherung"] },
 
-      { id:"extrasHospital", title:"Welche zusätzlichen Krankenhausleistungen sind Ihnen wichtig?", type:"multi", required:false, category:"extras",
+      { id:"extrasHospital", title:"Welche zusätzlichen Krankenhausleistungen sind Ihnen wichtig?", type:"multi", required:false,
         visibleIf:a => Array.isArray(a.extrasSelection) && a.extrasSelection.includes("Zusätzliche Krankenhausleistungen"),
         options:["Krankenhaus-Komfort","Sehhilfen & Brille","Heilmethoden","Pflegevorsorge","Ambulant & Prävention"] },
 
-      // Kinder (Zusatzleistungen & Basics) – gehört zu Zusatzleistungen / Gesundheit
-      { id:"insureChildren", title:"Sollen Kinder mitversichert werden?", type:"yesno", required:false, category:"personal",
+      { id:"maritalStatus", title:"Wie ist Ihr Familienstand?", type:"single", required:true,
+        options:["Ledig","In Partnerschaft","Verheiratet","Geschieden","Verwitwet"] },
+
+      { id:"hasChildren", title:"Haben Sie Kinder?", type:"yesno", required:true },
+
+      { id:"insureChildren", title:"Sollen Kinder mitversichert werden?", type:"yesno", required:false,
         visibleIf:a => a.hasChildren==="Ja" },
 
-      { id:"childrenAge", title:"Wie alt ist / sind Ihr(e) Kind(er)?", type:"multi", required:false, category:"personal",
+      // Kinder: hier lassen wir Mehrfachwahl bei Alter (mehrere Kinder möglich)
+      { id:"childrenAge", title:"Wie alt ist / sind Ihr(e) Kind(er)?", type:"multi", required:false,
         visibleIf:a => a.insureChildren==="Ja",
         options:["unter 6 Jahre","6–17 Jahre","18–25 Jahre","über 25 Jahre"] },
 
-      { id:"childrenEducation", title:"Befinden sich Ihre Kinder in Ausbildung oder Studium?", type:"single", required:false, category:"personal",
+      { id:"childrenEducation", title:"Befinden sich Ihre Kinder in Ausbildung oder Studium?", type:"single", required:false,
         visibleIf:a => a.insureChildren==="Ja",
         options:["In der Schule","In Ausbildung","Im Studium","Nein"] },
 
-      { id:"childrenInsurance", title:"Wie sind Ihre Kinder derzeit versichert?", type:"single", required:false, category:"personal",
+      { id:"childrenInsurance", title:"Wie sind Ihre Kinder derzeit versichert?", type:"single", required:false,
         visibleIf:a => a.insureChildren==="Ja",
         options:["über eine GKV","über eine PKV","aktuell nicht versichert"] },
 
-      { id:"childrenBenefits", title:"Welche Leistungen sind Ihnen für Ihre Kinder wichtig?", type:"multi", required:false, category:"extras",
+      { id:"childrenBenefits", title:"Welche Leistungen sind Ihnen für Ihre Kinder wichtig?", type:"multi", required:false,
         visibleIf:a => a.insureChildren==="Ja",
         options:["Zusätzliche Zahnleistungen","Zusätzliche Reiseversicherungen","Zusätzliche Krankenhausleistungen","Ich weiß es nicht"] },
 
-      // Gesundheitssituation
-      { id:"specialistTreatment", title:"Sind Sie in regelmäßiger fachärztlicher Behandlung?", type:"yesno", required:false, category:"health" },
+      { id:"specialistTreatment", title:"Sind Sie in regelmäßiger fachärztlicher Behandlung?", type:"yesno", required:false },
 
-      { id:"treatmentReason", title:"Erfolgt die fachärztliche Behandlung überwiegend aus Behandlungs- oder Vorsorgegründen?", type:"single", required:false, category:"health",
+      { id:"treatmentReason", title:"Erfolgt die fachärztliche Behandlung überwiegend aus Behandlungs- oder Vorsorgegründen?", type:"single", required:false,
         visibleIf:a => a.specialistTreatment==="Ja",
         options:["Überwiegend Behandlungsgründe","Überwiegend Vorsorgegründe","Beides in etwa gleich"] },
 
-      { id:"chronicDiseases", title:"Haben Sie chronische Erkrankungen?", type:"yesno", required:false, category:"health" },
+      { id:"chronicDiseases", title:"Haben Sie chronische Erkrankungen?", type:"yesno", required:false },
 
-      { id:"chronicDiseaseTypes", title:"Welche chronischen Erkrankungen liegen vor?", type:"multi", required:false, category:"health",
+      { id:"chronicDiseaseTypes", title:"Welche chronischen Erkrankungen liegen vor?", type:"multi", required:false,
         visibleIf:a => a.chronicDiseases==="Ja",
         options:[
           "Bluthochdruck / Herz-Kreislauf",
@@ -535,40 +536,35 @@
           "Krebs/Tumor (auch in Remission)"
         ] },
 
-      { id:"careDegree", title:"Haben Sie einen Pflegegrad oder eine anerkannte Behinderung?", type:"yesno", required:false, category:"health" },
+      { id:"careDegree", title:"Haben Sie einen Pflegegrad oder eine anerkannte Behinderung?", type:"yesno", required:false },
 
-      { id:"careDegreeLevel", title:"Welcher Pflegegrad liegt vor?", type:"single", required:false, category:"health",
+      { id:"careDegreeLevel", title:"Welcher Pflegegrad liegt vor?", type:"single", required:false,
         visibleIf:a => a.careDegree==="Ja",
         options:["1","2","3","4","5"] },
 
-      // Lifestyle
-      { id:"travel", title:"Reisen Sie regelmäßig?", type:"single", required:false, category:"lifestyle",
+      { id:"travel", title:"Reisen Sie regelmäßig?", type:"single", required:false,
         options:["Ja, innerhalb der EU","Ja, außerhalb der EU","Nein"] },
 
-      { id:"travelRegions", title:"In welche Regionen reisen Sie?", type:"multi", required:false, category:"lifestyle",
-        visibleIf:a => a.travel==="Ja, innerhalb der EU" || a.travel==="Ja, außerhalb der EU",
+      { id:"travelRegions", title:"In welche Regionen reisen Sie?", type:"multi", required:false,
+        visibleIf:a => a.travel==="Ja, außerhalb der EU",
         options:["USA / Kanada","Afrika","Naher Osten","Asien / Australien","Südamerika"] },
 
-      { id:"dangerousSports", title:"Üben Sie gefährliche Sportarten oder Freizeitaktivitäten aus?", type:"yesno", required:false, category:"lifestyle" },
+      { id:"dangerousSports", title:"Üben Sie gefährliche Sportarten aus?", type:"yesno", required:false },
 
-      { id:"sportsTypes", title:"Wie würden Sie Ihr Risikoniveau bei Sport / Hobbys einstufen?", type:"multi", required:false, category:"lifestyle",
-        subtitle:"Die Beispiele helfen nur bei der Einordnung und werden nicht einzeln gespeichert.",
+      { id:"sportsTypes", title:"Welche Art von Sport üben Sie aus?", type:"multi", required:false,
         visibleIf:a => a.dangerousSports==="Ja",
-        options:[
-          "Hohes Risiko – z. B. Fallschirmspringen, Freeclimbing, Motorradrennsport",
-          "Mittleres Risiko – z. B. Skifahren, Mountainbiken, Gerätetauchen",
-          "Geringes Risiko – z. B. Joggen, Fitnessstudio, Schwimmen"
-        ] },
+        options:["Hohes Risiko","Mittleres Risiko","Geringes Risiko"] },
 
-      { id:"smoking", title:"Rauchen Sie Zigaretten oder ähnliche Tabakwaren?", type:"single", required:false, category:"lifestyle",
+      { id:"smoking", title:"Rauchen Sie Zigaretten oder ähnliche Tabakwaren?", type:"single", required:false,
         options:["Ja","Gelegentlich","Nein"] },
 
-      { id:"smokingType", title:"Was rauchen Sie überwiegend?", type:"single", required:false, category:"lifestyle",
+      { id:"smokingType", title:"Was rauchen Sie überwiegend?", type:"single", required:false,
         visibleIf:a => a.smoking==="Ja" || a.smoking==="Gelegentlich",
         options:["Cannabis","Zigaretten","Cannabis und Zigaretten"] },
 
-      { id:"medicalCannabis", title:"Nutzen Sie Cannabis auf Rezept?", type:"yesno", required:false, category:"lifestyle",
+      { id:"medicalCannabis", title:"Nutzen Sie Cannabis auf Rezept?", type:"yesno", required:false,
         visibleIf:a => a.smokingType==="Cannabis" || a.smokingType==="Cannabis und Zigaretten" }
+    ];
     ];
 
     const state = {
@@ -874,3 +870,4 @@
   </script>
 </body>
 </html>
+
