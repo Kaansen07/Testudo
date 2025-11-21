@@ -494,6 +494,18 @@
         visibleIf:a => a.insureChildren==="Ja",
         options:["Zusätzliche Zahnleistungen","Zusätzliche Reiseversicherungen","Zusätzliche Krankenhausleistungen"] },
 
+      { id:"extrasChildrenDental", title:"Welche zusätzlichen Zahnleistungen sind Ihnen für Ihr Kind wichtig?", type:"multi", required:false, category:"addons",
+        visibleIf:a => Array.isArray(a.extrasChildrenSelection) && a.extrasChildrenSelection.includes("Zusätzliche Zahnleistungen"),
+        options:["Zahnersatz","Prophylaxe","Zahnreinigung","Zahnfüllung","Zahnimplantate"] },
+
+      { id:"extrasChildrenTravel", title:"Welche zusätzlichen Reiseversicherungen sind Ihnen für Ihr Kind wichtig?", type:"multi", required:false, category:"addons",
+        visibleIf:a => Array.isArray(a.extrasChildrenSelection) && a.extrasChildrenSelection.includes("Zusätzliche Reiseversicherungen"),
+        options:["Reiserücktrittsversicherung","Reiseabbruchversicherung","Auslandskrankenversicherung","Reisegepäckversicherung","Reisehaftpflichtversicherung","Reiseunfallversicherung"] },
+
+      { id:"extrasChildrenHospital", title:"Welche zusätzlichen Krankenhausleistungen sind Ihnen für ihr Kind wichtig?", type:"multi", required:false, category:"addons",
+        visibleIf:a => Array.isArray(a.extrasChildrenSelection) && a.extrasChildrenSelection.includes("Zusätzliche Krankenhausleistungen"),
+        options:["Krankenhaus-Komfort","Sehhilfen & Brille","Heilmethoden","Pflegevorsorge","Ambulant & Prävention"] },
+
       // Gesundheitssituation
       { id:"specialistTreatment", title:"Sind Sie in regelmäßiger fachärztlicher Behandlung?", type:"yesno", required:false, category:"health" },
 
@@ -887,4 +899,5 @@
   </script>
 </body>
 </html>
+
 
